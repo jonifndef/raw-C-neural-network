@@ -6,7 +6,7 @@ typedef struct Neuron
     double bias;
 } Neuron;
 
-Neuron* createNeuron(int numNeuronsPrevLayer, double bias);
-void deleteNeuron(Neuron *neuron);
-void updateNeuron(Neuron *neuron, double *inputs, double *weights);
+Neuron* createNeuron(int numNeuronsPrevLayer);
+void freeNeuronContents(Neuron *neuron);
+void updateNeuron(Neuron *neuron, double *inputs, double *weights, double bias);
 double getNeuronOutput(const Neuron *neuron);
