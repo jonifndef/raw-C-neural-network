@@ -1,4 +1,2 @@
-*
-!*.c
-!*.h
-!Makefile
+*.txt
+build
