@@ -8,6 +8,5 @@ typedef struct Neuron
 
 Neuron* createNeuron(int numNeuronsPrevLayer);
 void freeNeuronContents(Neuron *neuron);
-void updateNeuron(Neuron *neuron, double *inputs, double *weights, double bias);
 void updateWeightsAndBiasNeuron(Neuron *neuron, double *weights, double bias);
 double getNeuronOutput(const Neuron *neuron, double *inputs);

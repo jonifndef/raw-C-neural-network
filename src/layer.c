@@ -1,13 +1,10 @@
 #include <stdlib.h>
-#include <time.h>
 #include <stdio.h> // debug
 
 #include "layer.h"
 
 Layer *createLayer(int numNeurons, int numNeuronsPrevLayer)
 {
-    srand(time(0));
-
     Layer *layer = calloc(1, sizeof(Layer));
     layer->numNeurons = numNeurons;
     layer->neurons = calloc(numNeurons, sizeof(Neuron));
@@ -16,16 +13,6 @@ Layer *createLayer(int numNeurons, int numNeuronsPrevLayer)
     {
         layer->neurons[i] = *(createNeuron(numNeuronsPrevLayer));
     }
-
-    // weights should idealy be initialized with a value between -1.0 and 1.0
-    for (int k = 0; k < 10; k++)
-    {
-        double randNum = rand() % 200 - 100;
-        randNum /= 100;
-        printf("random num: %.2f\n", randNum);
-    }
-
-    // biases should idealy be initialized with 0, but if the network is "dead", try 1 or similar
 
     return layer;
 }

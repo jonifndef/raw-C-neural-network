@@ -6,6 +6,8 @@
 
 int main(int argc, char *argv[])
 {
+    srand(time(0));
+
     int numNeuronsPrevLayer = 4;
     int numNeuronsLayer = 3;
     int batchSize = 3;
