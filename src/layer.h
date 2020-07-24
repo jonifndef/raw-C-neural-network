@@ -1,14 +1,16 @@
 #include "neuron.h"
 #include "utils.h"
 
-typedef struct Layer
+typedef struct LayerDense
 {
     int numNeurons;
     Neuron *neurons;
+    MatrixDoubles *outputs;
     void *activationFunction; //will be a function pointer once we implement them
-} Layer;
+} LayerDense;
 
-Layer* createLayer(int numNeurons, int numNeuronsPrevLayer);
-void freeLayerContents(Layer *layer);
-void updateWeightsAndBiasesInLayer(Layer *layer, MatrixDoubles *weights, double *biases);
-MatrixDoubles* getOutputsFromLayer(Layer* layer, MatrixDoubles *inputs);
+LayerDense* createLayerDense(int numNeurons, int batchSize, int numNeuronsPrevLayer);
+void freeLayerDenseContents(LayerDense *layer);
+void updateWeightsAndBiasesInLayerDense(LayerDense *layer, MatrixDoubles *weights, double *biases);
+void forwardDense(LayerDense *layer, MatrixDoubles *inputs);
+MatrixDoubles* getOutputsFromLayerDense(LayerDense* layer);

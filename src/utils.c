@@ -17,7 +17,11 @@ MatrixDoubles* createMatrixDoubles(int numRows, int numColumns)
 
 void freeMatrixDoublesContents(MatrixDoubles *matrix)
 {
-
+    for(int i = 0; i < matrix->rows; i++)
+    {
+        free(matrix->data[i]);
+    }
+    free(matrix->data);
 }
 
 // Warning, length of data must be the same as num columns in matrix
