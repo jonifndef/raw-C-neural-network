@@ -16,18 +16,18 @@ int main(int argc, char *argv[])
     double biases2[3] = { -1, 2, -0.5 };
 
     // weights matrix
-    double weightsRow1[]  = { 0.2, 0.8, -0.5, 1.0 };
-    double weightsRow2[] =  { 0.5, -0.91, 0.26, -0.5 };
-    double weightsRow3[] =  { -0.26, -0.27, 0.17, 0.87 };
+    double weightsRow1[] = { 0.2, 0.8, -0.5, 1.0 };
+    double weightsRow2[] = { 0.5, -0.91, 0.26, -0.5 };
+    double weightsRow3[] = { -0.26, -0.27, 0.17, 0.87 };
 
     MatrixDoubles *weights = createMatrixDoubles(numNeuronsLayer, numNeuronsPrevLayer);
     setMatrixDoublesRow(weights, 0, weightsRow1);
     setMatrixDoublesRow(weights, 1, weightsRow2);
     setMatrixDoublesRow(weights, 2, weightsRow3);
 
-    double weights2Row1[]  = { 0.1, -0.14, 0.5 };
-    double weights2Row2[] =  { -0.5, 0.12, -0.33 };
-    double weights2Row3[] =  { -0.44, 0.37, -0.13 };
+    double weights2Row1[] = { 0.1, -0.14, -0.5 };
+    double weights2Row2[] = { -0.5, 0.12, -0.33 };
+    double weights2Row3[] = { -0.44, 0.73, -0.13 };
 
     MatrixDoubles *weights2 = createMatrixDoubles(numNeuronsLayer, numNeuronsLayer);
     setMatrixDoublesRow(weights2, 0, weights2Row1);

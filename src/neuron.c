@@ -44,11 +44,7 @@ double getNeuronOutput(const Neuron *neuron, double *inputs)
     for (int i = 0; i < neuron->numInputs; i++)
     {
         output += inputs[i] * neuron->weights[i];
-        printf("input %d of neuron: %f\n", i, inputs[i]);
-        printf("weight %d of neuron: %f\n", i, neuron->weights[i]);
-        printf("output from neuron so far: %f\n", output);
     }
     output += neuron->bias;
-    printf("output from neuron in the end: %f\n\n", output);
     return output;
 }
