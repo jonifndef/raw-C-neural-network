@@ -3,6 +3,7 @@
 #include <time.h>
 
 #include "layer.h"
+#include "activationfunctions.h"
 
 int main(int argc, char *argv[])
 {
@@ -48,10 +49,10 @@ int main(int argc, char *argv[])
     MatrixDoubles *outputs1 = createMatrixDoubles(batchSize, numNeuronsLayer);
     MatrixDoubles *outputs2 = createMatrixDoubles(batchSize, numNeuronsLayer);
 
-    LayerDense *layer1 = createLayerDense(numNeuronsLayer, batchSize, numNeuronsPrevLayer);
+    LayerDense *layer1 = createLayerDense(numNeuronsLayer, batchSize, numNeuronsPrevLayer, relu);
     updateWeightsAndBiasesInLayerDense(layer1, weights, biases);
 
-    LayerDense *layer2 = createLayerDense(numNeuronsLayer, batchSize, numNeuronsLayer);
+    LayerDense *layer2 = createLayerDense(numNeuronsLayer, batchSize, numNeuronsLayer, relu);
     updateWeightsAndBiasesInLayerDense(layer2, weights2, biases2);
 
     forwardDense(layer1, inputs);

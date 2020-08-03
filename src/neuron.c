@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 
-Neuron* createNeuron(int numNeuronsPrevLayer)
+Neuron* createNeuron(int numNeuronsPrevLayer, double(*activationFunction)(double))
 {
     Neuron *neuron = calloc(1, sizeof(Neuron));
     neuron->numInputs = numNeuronsPrevLayer;

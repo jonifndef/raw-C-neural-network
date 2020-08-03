@@ -3,7 +3,7 @@
 
 #include "layer.h"
 
-LayerDense *createLayerDense(int numNeurons, int batchSize, int numNeuronsPrevLayerDense)
+LayerDense *createLayerDense(int numNeurons, int batchSize, int numNeuronsPrevLayerDense, double (*activationFunction)(double))
 {
     LayerDense *layer= calloc(1, sizeof(LayerDense));
     layer->numNeurons = numNeurons;
@@ -12,7 +12,7 @@ LayerDense *createLayerDense(int numNeurons, int batchSize, int numNeuronsPrevLa
 
     for (int i = 0; i < numNeurons; i++)
     {
-        layer->neurons[i] = *(createNeuron(numNeuronsPrevLayerDense));
+        layer->neurons[i] = *(createNeuron(numNeuronsPrevLayerDense, activationFunction));
     }
 
     return layer;
