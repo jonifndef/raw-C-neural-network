@@ -8,6 +8,7 @@ Neuron* createNeuron(int numNeuronsPrevLayer, double(*activationFunction)(double
 {
     Neuron *neuron = calloc(1, sizeof(Neuron));
     neuron->numInputs = numNeuronsPrevLayer;
+    neuron->activationFunction = activationFunction;
 
     // biases should idealy be initialized with 0, but if the network is "dead", try 1 or similar
     neuron->bias = 0.0;
@@ -46,5 +47,14 @@ double getNeuronOutput(const Neuron *neuron, double *inputs)
         output += inputs[i] * neuron->weights[i];
     }
     output += neuron->bias;
-    return output;
+    return neuron->activationFunction(output);
+
+    //while(!feof(fp))
+    //{
+    //  ch = fgetc(fp);
+    //  if(ch == '\n')
+    //  {
+    //    lines++;
+    //  }
+    //}
 }

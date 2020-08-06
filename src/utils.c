@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "utils.h"
 
@@ -46,4 +47,22 @@ double* getMatrixDoublesRow(MatrixDoubles *matrix, int row)
 double getMatrixDoublesElement(MatrixDoubles *matrix, int row, int column)
 {
     return matrix->data[row][column];
+}
+
+bool readSampleData(const char* filePath, MatrixDoubles *data)
+{
+    FILE *fp;
+    int fileSize = 0;
+    
+    fp = fopen(filePath, "r");
+    if (fp == NULL)
+        return false;
+    fseek(fp, 0, SEEK_END);
+    fileSize = ftell(fp);
+    if (fileSize == -1)
+        return false;
+
+    printf("Size of file: %d\n", fileSize);
+
+    return true;
 }

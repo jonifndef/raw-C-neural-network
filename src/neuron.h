@@ -4,7 +4,7 @@ typedef struct Neuron
     double *inputs;
     double *weights;
     double bias;
-    void *activationFunction;
+    double(*activationFunction)(double);
 } Neuron;
 
 Neuron* createNeuron(int numNeuronsPrevLayer, double(*activationFunction)(double));

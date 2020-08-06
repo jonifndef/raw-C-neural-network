@@ -1,7 +1,8 @@
 import os
 import numpy as np
 
-OUTPUT_FILE = f"{os.path.dirname(os.path.realpath(__file__))}/create_data_ouput.txt"
+X_OUTPUT_FILE = f"{os.path.dirname(os.path.realpath(__file__))}/output_X.txt"
+Y_OUTPUT_FILE = f"{os.path.dirname(os.path.realpath(__file__))}/output_y.txt"
 
 np.random.seed(0)
 
@@ -18,7 +19,6 @@ def create_data(points, classes):
 
 import matplotlib.pyplot as plt
 
-print("here")
 X, y = create_data(100, 3)
 
 #plt.scatter(X[:,0], X[:,1])
@@ -27,12 +27,15 @@ X, y = create_data(100, 3)
 #plt.scatter(X[:,0], X[:,1], c=y, cmap="brg")
 #plt.show()
 
-print(X)
+#print(X)
 #print(y)
 
-#print(OUTPUT_FILE)
-#f = open(OUTPUT_FILE, "w")
-#for i in range(len(X)):
-#    f.write(f"{X[i][0]} {X[i][1]}\n")
-##f.write(
-#f.close()
+fx = open(X_OUTPUT_FILE, "w")
+for i in range(len(X)):
+    fx.write(f"{X[i][0]} {X[i][1]}\n")
+fx.close()
+
+fy = open(Y_OUTPUT_FILE, "w")
+for j in range(len(y)):
+    fy.write(f"{y[j]}\n")
+fy.close()
