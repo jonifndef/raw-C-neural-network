@@ -7,6 +7,10 @@
 
 int main(int argc, char *argv[])
 {
+    MatrixDoubles *mrx = calloc(1, sizeof(MatrixDoubles));
+    readSampleData("/home/jonas/Development/raw_C_neural_network/nnfs_python/output_X.txt", mrx);
+    return 0;
+
     srand(time(0));
 
     int numNeuronsPrevLayer = 4;

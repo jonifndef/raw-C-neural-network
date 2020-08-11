@@ -52,17 +52,44 @@ double getMatrixDoublesElement(MatrixDoubles *matrix, int row, int column)
 bool readSampleData(const char* filePath, MatrixDoubles *data)
 {
     FILE *fp;
-    int fileSize = 0;
-    
+    int numFields = 0;
+    int numFieldsFirstRow = 0;
+    int numRows = 0;
+    int numTokensInField = 0;
+    char c = '_';
+
     fp = fopen(filePath, "r");
     if (fp == NULL)
         return false;
-    fseek(fp, 0, SEEK_END);
-    fileSize = ftell(fp);
-    if (fileSize == -1)
-        return false;
 
-    printf("Size of file: %d\n", fileSize);
+
+    while (c != EOF)
+    {
+        c = getc(fp);
+        if (c == ' ')
+        {
+            if (numTokensInField > 0)
+            {
+                numFields++;
+            }
+        }
+        else if (c == '\n')
+        {
+            if (numRows == 0)
+                numFieldsFirstRow = numFields;
+            else if (numFieldsFirstRow != numFields)
+                return false;
+
+            numFields = 1;
+            numRows++;
+        }
+        else //it's a valid token
+        {
+            numTokensInField++;
+        }
+    }
+
+    printf("numfields: %d, numRows: %d\n", numFields, numRows);
 
     return true;
 }
