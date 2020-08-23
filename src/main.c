@@ -8,7 +8,9 @@
 int main(int argc, char *argv[])
 {
     MatrixDoubles *mrx = calloc(1, sizeof(MatrixDoubles));
-    readSampleData("/home/jonas/Development/raw_C_neural_network/nnfs_python/output_X.txt", mrx);
+    //readSampleData("/home/jonas/Development/raw_C_neural_network/nnfs_python/output_X.txt", mrx);
+    if (!readSampleData("/home/jonas/Development/ollebolle_test.txt", mrx))
+        printf("invalid format\n");
     return 0;
 
     srand(time(0));
