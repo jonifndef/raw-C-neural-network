@@ -1,5 +1,9 @@
+#ifndef LAYER_H_
+#define LAYER_H_
+
 #include "neuron.h"
-#include "utils.h"
+#include "utils/fileIO.h"
+#include "utils/matrix.h"
 
 typedef struct LayerDense
 {
@@ -14,3 +18,5 @@ void freeLayerDenseContents(LayerDense *layer);
 void updateWeightsAndBiasesInLayerDense(LayerDense *layer, MatrixDoubles *weights, double *biases);
 void forwardDense(LayerDense *layer, MatrixDoubles *inputs);
 MatrixDoubles* getOutputsFromLayerDense(LayerDense* layer);
+
+#endif // LAYER_H_

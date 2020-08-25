@@ -1,6 +1,5 @@
-#define bool char
-#define true 1
-#define false 0
+#ifndef MATRIXDOUBLES_H_
+#define MATRIXDOUBLES_H_
 
 typedef struct MatrixDoubles
 {
@@ -18,5 +17,4 @@ double* getMatrixDoublesRow(MatrixDoubles *matrix, int row);
 //double* getMatrixDoublesColumn(MatrixDoubles *matrix, int column);
 double getMatrixDoublesElement(MatrixDoubles *matrix, int row, int column);
 
-// Reading data sample
-bool readSampleData(const char* filePath, MatrixDoubles *data);
+#endif //MATRIXDOUBLES
