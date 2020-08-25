@@ -3,7 +3,10 @@
 
 #include "layer.h"
 
-LayerDense *createLayerDense(int numNeurons, int batchSize, int numNeuronsPrevLayerDense, double (*activationFunction)(double))
+LayerDense *createLayerDense(int numNeurons,
+                             int batchSize,
+                             int numNeuronsPrevLayerDense,
+                             double (*activationFunction)(double))
 {
     LayerDense *layer= calloc(1, sizeof(LayerDense));
     layer->numNeurons = numNeurons;
@@ -24,7 +27,9 @@ void freeLayerDenseContents(LayerDense *layer)
     free(layer->outputs);
 }
 
-void updateWeightsAndBiasesInLayerDense(LayerDense *layer, MatrixDoubles *weights, double *biases)
+void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
+                                        const MatrixDoubles *weights,
+                                        const double *biases)
 {
     for (int i = 0; i < layer->numNeurons; i++)
     {
@@ -32,7 +37,7 @@ void updateWeightsAndBiasesInLayerDense(LayerDense *layer, MatrixDoubles *weight
     }
 }
 
-void forwardDense(LayerDense* layer, MatrixDoubles *inputs)
+void forwardDense(LayerDense* layer, const MatrixDoubles *inputs)
 {
     // The rows in this instance represent the batches
     // We want to calculate the the output of each neuron for each of the batches
@@ -45,7 +50,7 @@ void forwardDense(LayerDense* layer, MatrixDoubles *inputs)
     }
 }
 
-MatrixDoubles* getOutputsFromLayerDense(LayerDense* layer)
+MatrixDoubles* getOutputsFromLayerDense(const LayerDense* layer)
 {
     return layer->outputs;
 }

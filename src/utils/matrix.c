@@ -39,12 +39,12 @@ void setMatrixDoubelsColumn(MatrixDoubles *matrix, int column, double *data)
 
 }
 
-double* getMatrixDoublesRow(MatrixDoubles *matrix, int row)
+double* getMatrixDoublesRow(const MatrixDoubles *matrix, int row)
 {
     return matrix->data[row];
 }
 
-double getMatrixDoublesElement(MatrixDoubles *matrix, int row, int column)
+double getMatrixDoublesElement(const MatrixDoubles *matrix, int row, int column)
 {
     return matrix->data[row][column];
 }

@@ -13,10 +13,15 @@ typedef struct LayerDense
     void *activationFunction; //will be a function pointer once we implement them
 } LayerDense;
 
-LayerDense* createLayerDense(int numNeurons, int batchSize, int numNeuronsPrevLayer, double (*activationFunction)(double));
+LayerDense* createLayerDense(int numNeurons,
+                             int batchSize,
+                             int numNeuronsPrevLayer,
+                             double (*activationFunction)(double));
 void freeLayerDenseContents(LayerDense *layer);
-void updateWeightsAndBiasesInLayerDense(LayerDense *layer, MatrixDoubles *weights, double *biases);
-void forwardDense(LayerDense *layer, MatrixDoubles *inputs);
-MatrixDoubles* getOutputsFromLayerDense(LayerDense* layer);
+void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
+                                        const MatrixDoubles *weights,
+                                        const double *biases);
+void forwardDense(LayerDense *layer, const MatrixDoubles *inputs);
+MatrixDoubles* getOutputsFromLayerDense(const LayerDense *layer);
 
 #endif // LAYER_H_
