@@ -3,6 +3,20 @@
 
 #include "fileIO.h"
 
+static bool getFileFormat(int rows, int columns)
+{
+    // TODO: implement
+    return false;
+}
+
+static MatrixDoubles* populateMatrix(const char *filePath,
+                                    int rows,
+                                    int columns)
+{
+    // TODO: implement
+    return NULL;
+}
+
 bool readSampleData(const char* filePath, MatrixDoubles *data)
 {
     FILE *fp;
