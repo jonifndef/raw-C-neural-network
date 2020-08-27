@@ -3,27 +3,11 @@
 
 #include "fileIO.h"
 
-static bool getFileFormat(int rows, int columns)
-{
-    // TODO: implement
-    return false;
-}
-
-static MatrixDoubles* populateMatrix(const char *filePath,
-                                    int rows,
-                                    int columns)
-{
-    // TODO: implement
-    return NULL;
-}
-
-bool readSampleData(const char* filePath, MatrixDoubles *data)
+static bool getFileFormat(const char *filePath, int *rows, int *columns)
 {
     FILE *fp;
     int numFieldsInRow = 0;
     int numFieldsFirstRow = 0;
-    int numFields = 0;
-    int numRows = 0;
     int numTokensInField = 0;
     char c = '_';
 
@@ -51,7 +35,7 @@ bool readSampleData(const char* filePath, MatrixDoubles *data)
         {
             if (numFieldsInRow > 0)
             {
-                if (numRows == 0)
+                if (*rows == 0)
                     numFieldsFirstRow = numFieldsInRow;
                 else if (numFieldsFirstRow != numFieldsInRow)
                     return false; // unmatching rows
@@ -60,9 +44,9 @@ bool readSampleData(const char* filePath, MatrixDoubles *data)
                     numFieldsInRow++;
                 else
                     return false; // invalid format
-                numFields = numFieldsInRow;
+                *columns = numFieldsInRow;
                 numFieldsInRow = 0;
-                numRows++;
+                (*rows)++;
             }
             else
             {
@@ -76,8 +60,26 @@ bool readSampleData(const char* filePath, MatrixDoubles *data)
         }
     }
 
-    printf("numfields: %d, numRows: %d\n", numFields, numRows);
+    printf("numfields: %d, numRows: %d\n", *columns, *rows);
     fclose(fp);
 
     return true;
+}
+
+//static MatrixDoubles* populateMatrix(const char *filePath,
+//                                    int rows,
+//                                    int columns)
+//{
+//    // TODO: implement
+//    return NULL;
+//}
+
+bool readSampleData(const char* filePath, MatrixDoubles *data)
+{
+    int *rows = calloc(1, sizeof(int));
+    int *columns = calloc(1, sizeof(int));
+    if (!getFileFormat(filePath, rows, columns))
+        return false;
+    else
+        return true;
 }
