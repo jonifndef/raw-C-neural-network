@@ -51,13 +51,22 @@ double getMatrixDoublesElement(const MatrixDoubles *matrix, int row, int column)
 
 //-----------------------------------------------------------------------------
 
-static void reAllocDynamicMatrixRow(DynamicMatrix *matrix, int newCapacity)
+static void reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
 {
-    double *newRow = calloc(newCapacity, sizeof(double));
+    double **newData = calloc(newRowCapacity, sizeof(double));
+    for (int i = 0; i < newRowCapacity; i++)
+    {
+        newData[i] = calloc(matrix->columnCapacity, sizeof(double));
+    }
+
     for (int i = 0; i < matrix->rows; i++)
     {
-        //newRow[i] = matrix->data[
+        newData[i] = matrix->data[i];
     }
+
+    freeDynamicMatrix(matrix);
+    matrix->rowCapacity = newRowCapacity;
+    matrix->data = newData;
 }
 
 static void reAllocDynamicMatrixColumn(int newCapacity)
@@ -81,4 +90,13 @@ DynamicMatrix* createDynamicMatrix()
     }
 
     return matrix;
+}
+
+void freeDynamicMatrix(DynamicMatrix *matrix)
+{
+    for (int i = 0; i < matrix->rowCapacity; i++)
+    {
+        free(matrix->data[i]);
+    }
+    free(matrix->data);
 }

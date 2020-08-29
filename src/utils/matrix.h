@@ -1,5 +1,5 @@
-#ifndef MATRIXDOUBLES_H_
-#define MATRIXDOUBLES_H_
+#ifndef MATRIX_H_
+#define MATRIX_H_
 
 typedef struct MatrixDoubles
 {
@@ -43,4 +43,4 @@ void transposeDynamicMatrix(DynamicMatrix *matrix);
 void clearDynamicMatrix(DynamicMatrix *matrix);
 void freeDynamicMatrix(DynamicMatrix *matrix);
 
-#endif //MATRIXDOUBLES
+#endif //MATRIX
