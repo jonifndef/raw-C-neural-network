@@ -4,14 +4,13 @@
 
 #include "layer.h"
 #include "activationfunctions.h"
+#include "utils/dynamicarray.h"
 
 int main(int argc, char *argv[])
 {
-    MatrixDoubles *mrx = calloc(1, sizeof(MatrixDoubles));
-    if (!readSampleData("/home/jonas/Development/raw_C_neural_network/nnfs_python/output_X.txt", mrx))
-    //if (!readSampleData("/home/jonas/Development/ollebolle_test.txt", mrx))
-        printf("invalid format\n");
+    // test code goes brrrrr
     return 0;
+
 
     srand(time(0));
 

@@ -13,8 +13,10 @@ typedef struct DynamicArray
 DynamicArray* createDynamicArr();
 void freeDynamicArr(DynamicArray *array);
 void pushBackDynamicArr(DynamicArray *array, double element);
+bool setDynamicArrElement(DynamicArray *array, int index, double value);
+int getDynamicArrSize(DynamicArray *array);
 double getDynamicArrElement(DynamicArray *array, int index);
-bool copyDynamicArr(DynamicArray *destination, DynamicArray *source);
+void copyDynamicArr(DynamicArray *destination, DynamicArray *source);
 void clearDynamicArr(DynamicArray *array);
 
 #endif // DYNAMICARRAY_H_
