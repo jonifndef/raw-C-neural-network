@@ -54,22 +54,25 @@ bool setDynamicArrElement(DynamicArray *array, int index, double value)
         return false;
 }
 
-int getDynamicArrSize(DynamicArray *array)
+int getDynamicArrSize(const DynamicArray *array)
 {
     return array->size;
 }
 
-double getDynamicArrElement(DynamicArray *array, int index)
+double getDynamicArrElement(const DynamicArray *array, int index)
 {
     return (index <= array->capacity) ? array->data[index] : 0.0;
 }
 
-void copyDynamicArr(DynamicArray *destination, DynamicArray *source)
+void copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
 {
-    for (int i = 0; i < source->size; i++)
-    {
-        pushBackDynamicArr(destination, source->data[i]);
-    }
+    double *newData = calloc(source->capacity, sizeof(double));
+    memcpy(newData, source->data, source->size * sizeof(double));
+
+    destination->capacity = source->capacity;
+    free(destination->data);
+
+    destination->data = newData;
 }
 
 void clearDynamicArr(DynamicArray *array)
