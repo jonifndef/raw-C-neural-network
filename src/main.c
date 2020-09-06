@@ -8,10 +8,6 @@
 
 int main(int argc, char *argv[])
 {
-    // test code goes brrrrr
-    return 0;
-
-
     srand(time(0));
 
     int numNeuronsPrevLayer = 4;
@@ -69,7 +65,7 @@ int main(int argc, char *argv[])
         for (int j = 0; j < numNeuronsLayer; j++)
         {
             double element = getMatrixDoublesElement(outputs1, i, j);
-            printf("%.3f ", element);
+            printf("%.4f ", element);
         }
         printf("\n");
     }
@@ -85,7 +81,7 @@ int main(int argc, char *argv[])
         for (int j = 0; j < numNeuronsLayer; j++)
         {
             double element = getMatrixDoublesElement(outputs2, i, j);
-            printf("%.3f ", element);
+            printf("%.4f ", element);
         }
         printf("\n");
     }
@@ -97,3 +93,13 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+// Correct answers for layer 1:
+//      4.8,     1.21,     2.385
+//      8.9,    -1.81,     0.2
+//      1.41,    1.051,    0.026
+
+// Correct answers for layer 2:
+//      0.5031, -1.04185, -2.03875
+//      0.2434, -2.7332,  -5.7633
+//     -0.99314, 1.41254, -0.35655

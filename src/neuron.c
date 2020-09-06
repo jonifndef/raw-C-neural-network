@@ -47,14 +47,6 @@ double getNeuronOutput(const Neuron *neuron, double *inputs)
         output += inputs[i] * neuron->weights[i];
     }
     output += neuron->bias;
-    return neuron->activationFunction(output);
-
-    //while(!feof(fp))
-    //{
-    //  ch = fgetc(fp);
-    //  if(ch == '\n')
-    //  {
-    //    lines++;
-    //  }
-    //}
+    return output;
+    //return neuron->activationFunction(output);
 }

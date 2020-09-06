@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -Werror -Wpedantic
+CFLAGS = -g -Wall -Wpedantic
 SRC_DIR = src
 BUILD_DIR = build
 SRC_FILES = $(SRC_DIR)/*.c $(SRC_DIR)/utils/*.c
