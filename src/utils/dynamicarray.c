@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "dynamicarray.h"
 
@@ -54,6 +55,17 @@ bool setDynamicArrElement(DynamicArray *array, int index, double value)
         return false;
 }
 
+void setDynamicArrRow(DynamicArray *array, const double *row, int size)
+{
+    if (size > array->capacity)
+    {
+        reAllocDynamicArr(array, size);
+    }
+    memcpy(array->data, row, size * sizeof(double));
+    array->size = size;
+}
+
+
 int getDynamicArrSize(const DynamicArray *array)
 {
     return array->size;
@@ -82,4 +94,14 @@ void clearDynamicArr(DynamicArray *array)
         array->data[i] = 0.0;
     }
     array->size = 0;
+}
+
+// For debug purposes:
+void printDynamicArr(const DynamicArray *array)
+{
+    for (int i = 0; i < array->size; i++)
+    {
+        printf("%.3f ", array->data[i]);
+    }
+    printf("\n");
 }
