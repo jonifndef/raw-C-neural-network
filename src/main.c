@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     setMatrixDoublesRow(weights, 1, weightsRow2);
     setMatrixDoublesRow(weights, 2, weightsRow3);
 
-    double weights2Row1[] = { 0.1, -0.14, -0.5 };
+    double weights2Row1[] = { 0.1, -0.14, 0.5 };
     double weights2Row2[] = { -0.5, 0.12, -0.33 };
     double weights2Row3[] = { -0.44, 0.73, -0.13 };
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     forwardDense(layer1, inputs);
     outputs1 = getOutputsFromLayerDense(layer1);
 
-    printf("== Output form layer 1: ===\n");
+    printf("=== Output form layer 1: ===\n");
     for (int i = 0; i < batchSize; i++)
     {
         for (int j = 0; j < numNeuronsLayer; j++)
