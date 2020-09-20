@@ -82,6 +82,11 @@ void copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
     memcpy(newData, source->data, source->size * sizeof(double));
 
     destination->capacity = source->capacity;
+    destination->size = source->size;
+
+    // This memory might not be pointing to anything if it's a brand new array
+    // but is has definitively been allocated with a call to createDynamicArray()
+    // so free it to not have it dangeling
     free(destination->data);
 
     destination->data = newData;

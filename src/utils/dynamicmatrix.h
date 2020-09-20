@@ -32,4 +32,7 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
 void transposeDynamicMatrix(DynamicMatrix *matrix);
 void clearDynamicMatrix(DynamicMatrix *matrix);
 
+// Debug
+void printDynamicMatrix(DynamicMatrix *matrix);
+
 #endif // DYNAMICMATRIX_H_
