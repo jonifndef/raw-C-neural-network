@@ -24,7 +24,7 @@ all: raw-c-neural-network
 raw-c-neural-network: libRawCNeuralNetwork.a
 	gcc $(CFLAGS) -o $(BUILD_DIR)/raw-c-neural-network $(SRC_DIR)/main.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a
 
-libNeuralNetworkUtils.a: $(LIBNNUTILS_FILES)
+libNeuralNetworkUtils.a: $(LIBNNUTILS_FILES:.c=.o)
 	ar rcs $(BUILD_DIR)/$@ $^
 	ranlib $(BUILD_DIR)/$@
 
@@ -32,8 +32,11 @@ libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_FILES:.c=.o)
 	ar rcs $(BUILD_DIR)/$@ $(LIBRAWCNEURALNETWORK_FILES:.c=.o)
 	ranlib $(BUILD_DIR)/$@
 
-test-1: libRawCNeuralNetwork.a
-	gcc $(CFLAGS) -o $(BUILD_DIR)/test-a $(TEST_DIR)/main_test_non_dynamic_arrays.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a
+#test-1: libRawCNeuralNetwork.a
+#	gcc $(CFLAGS) -o $(BUILD_DIR)/test-a $(TEST_DIR)/main_test_non_dynamic_arrays.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a
+
+utilsTest: libNeuralNetworkUtils.a
+	gcc $(CFLAGS) -o $(BUILD_DIR)/utilsTest $(TEST_DIR)/runTests.c -L. $(BUILD_DIR)/libNeuralNetworkUtils.a -lcheck
 
 clean:
 	rm -f $(BUILD_DIR)/* $(shell find * -name "*.o")
