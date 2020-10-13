@@ -76,6 +76,20 @@ void pushRow(DynamicMatrix *matrix, DynamicArray *row)
     }
 
     copyDynamicArr(matrix->data[matrix->rows++], row);
+    matrix->columns = getDynamicArrSize(row);
+}
+
+double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
+{
+    if ((row >= 0 && row <= matrix->rows) &&
+        (column >= 0 && column <= matrix->columns))
+    {
+        return getDynamicArrElement(matrix->data[row], column);
+    }
+    else
+    {
+        return 0.0;
+    }
 }
 
 void printDynamicMatrix(DynamicMatrix *matrix)
