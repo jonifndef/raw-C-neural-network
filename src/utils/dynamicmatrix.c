@@ -23,6 +23,11 @@ static void reAllocDynamicArr(DynamicArray *array, int newCapacity)
     array->data = newData;
 }
 
+static void reAllocDynamicMatrix(DynamicMatrix *matrix, int rowCapacity, int columnCapacity)
+{
+
+}
+
 //static void reAllocDynamicMatrixColumn(int newCapacity)
 //{
 //
