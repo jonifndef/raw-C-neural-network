@@ -7,28 +7,21 @@
 
 static void reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
 {
-    matrix->data = realloc(matrix->data, newRowCapacity);
+    DynamicArray **newData = calloc(newRowCapacity, sizeof(DynamicArray));
+    for (int i = 0; i < newRowCapacity; i++)
+    {
+        newData[i] = createDynamicArr();
+        if (i < matrix->rowCapacity)
+        {
+            copyDynamicArr(newData[i], matrix->data[i]);
+        }
+    }
+    freeDynamicMatrix(matrix);
+    matrix->data = newData;
     matrix->rowCapacity = newRowCapacity;
 }
 
-// Todo: call the dynamicArr instance, right?
-static void reAllocDynamicArr(DynamicArray *array, int newCapacity)
-{
-    double *newData = calloc(newCapacity, sizeof(double));
-    memcpy(newData, array->data, array->size * sizeof(double));
-
-    array->capacity = newCapacity;
-    free(array->data);
-
-    array->data = newData;
-}
-
-static void reAllocDynamicMatrix(DynamicMatrix *matrix, int rowCapacity, int columnCapacity)
-{
-
-}
-
-//static void reAllocDynamicMatrixColumn(int newCapacity)
+//static void reAllocDynamicMatrixColumns(DynamicMatrix *matrix, int newCapacity)
 //{
 //
 //}
@@ -64,7 +57,10 @@ void freeDynamicMatrix(DynamicMatrix *matrix)
 
 void pushRow(DynamicMatrix *matrix, DynamicArray *row)
 {
-    // Todo: make a function out of this!
+    // two cases:
+    //  - the length of the new row is longer than the current column capacity
+    //  - the current row capacity is already filled
+
     if (getDynamicArrSize(row) > matrix->columnCapacity)
     {
         for (int i = 0; i < matrix->rowCapacity; i++)
@@ -74,14 +70,16 @@ void pushRow(DynamicMatrix *matrix, DynamicArray *row)
         matrix->columnCapacity = getDynamicArrSize(row);
     }
 
-    printDynamicArr(matrix->data[0]);
     if (matrix->rows >= matrix->rowCapacity)
     {
         reAllocDynamicMatrixRows(matrix, matrix->rowCapacity + (matrix->rowCapacity / 2));
     }
 
     copyDynamicArr(matrix->data[matrix->rows++], row);
-    matrix->columns = getDynamicArrSize(row);
+    if (getDynamicArrSize(row) > matrix->columns)
+    {
+        matrix->columns = getDynamicArrSize(row);
+    }
 }
 
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
@@ -93,6 +91,7 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
     }
     else
     {
+        // Hmm...? How to do this in a nicer way? O_o
         return 0.0;
     }
 }
@@ -101,9 +100,9 @@ void printDynamicMatrix(DynamicMatrix *matrix)
 {
     for (int i = 0; i < matrix->rows; i++)
     {
-        for (int j = 0; j < getDynamicArrSize(matrix->data[i]); j++)
+        for (int j = 0; j < matrix->columns; j++)
         {
-            printf("%.3f ", getDynamicArrElement(matrix->data[i], j));
+            printf("%.3f ", matrix->data[i]->data[j]);
         }
         printf("\n");
     }

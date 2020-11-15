@@ -31,10 +31,13 @@ START_TEST(dynamicMatrixTest)
     pushRow(matrix, arr3);
     freeDynamicArr(arr3);
 
-    double row4[] = { 2.78, 49,98, 2.30 };
+    double row4[] = { 2.78, 49.98, 2.30 };
     setDynamicArrRow(arr4, row4, 3);
     pushRow(matrix, arr4);
     freeDynamicArr(arr4);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrix, 3, 2), 2.30);
+    ck_assert_double_eq(getDynamicMatrixElement(matrix, 2, 5), 0.0);
 
     printDynamicMatrix(matrix);
 

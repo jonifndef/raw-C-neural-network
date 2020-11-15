@@ -11,6 +11,7 @@ typedef struct DynamicArray
 } DynamicArray;
 
 DynamicArray* createDynamicArr();
+void reAllocDynamicArr(DynamicArray *arr, int newCapacity);
 void freeDynamicArr(DynamicArray *array);
 void pushBackDynamicArr(DynamicArray *array, double element);
 bool setDynamicArrElement(DynamicArray *array, int index, double value);

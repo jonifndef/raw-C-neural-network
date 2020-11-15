@@ -4,17 +4,6 @@
 
 #include "dynamicarray.h"
 
-static void reAllocDynamicArr(DynamicArray *array, int newCapacity)
-{
-    double *newData = calloc(newCapacity, sizeof(double));
-    memcpy(newData, array->data, array->size * sizeof(double));
-
-    array->capacity = newCapacity;
-    free(array->data);
-
-    array->data = newData;
-}
-
 DynamicArray* createDynamicArr()
 {
     DynamicArray *array = calloc(1, sizeof(DynamicArray));
@@ -25,6 +14,17 @@ DynamicArray* createDynamicArr()
     array->data = calloc(array->capacity, sizeof(double));
 
     return array;
+}
+
+void reAllocDynamicArr(DynamicArray *array, int newCapacity)
+{
+    double *newData = calloc(newCapacity, sizeof(double));
+    memcpy(newData, array->data, array->size * sizeof(double));
+
+    array->capacity = newCapacity;
+    free(array->data);
+
+    array->data = newData;
 }
 
 void freeDynamicArr(DynamicArray *array)
@@ -86,8 +86,12 @@ void copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
 
     // This memory might not be pointing to anything if it's a brand new array
     // but is has definitively been allocated with a call to createDynamicArray()
+    // if capacity is set to the default value,
     // so free it to not have it dangeling
-    free(destination->data);
+    if (destination->capacity == 4)
+    {
+        free(destination->data);
+    }
 
     destination->data = newData;
 }
