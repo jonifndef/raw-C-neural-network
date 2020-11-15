@@ -7,24 +7,38 @@
 DynamicArray* createDynamicArr()
 {
     DynamicArray *array = calloc(1, sizeof(DynamicArray));
+    if (array == NULL)
+    {
+        return NULL;
+    }
 
     // default capacity 4, seems reasonable, right?
     array->capacity = 4;
     array->size = 0;
     array->data = calloc(array->capacity, sizeof(double));
+    if (array->data == NULL)
+    {
+        return NULL;
+    }
 
     return array;
 }
 
-void reAllocDynamicArr(DynamicArray *array, int newCapacity)
+bool reAllocDynamicArr(DynamicArray *array, int newCapacity)
 {
     double *newData = calloc(newCapacity, sizeof(double));
+    if (newData == NULL)
+    {
+        return false;
+    }
+
     memcpy(newData, array->data, array->size * sizeof(double));
 
     array->capacity = newCapacity;
     free(array->data);
 
     array->data = newData;
+    return true;
 }
 
 void freeDynamicArr(DynamicArray *array)
@@ -33,15 +47,19 @@ void freeDynamicArr(DynamicArray *array)
     free(array);
 }
 
-void pushBackDynamicArr(DynamicArray *array, double element)
+bool pushBackDynamicArr(DynamicArray *array, double element)
 {
     if (array->size >= array->capacity)
     {
         // Note, newCapacity might need some tweaking
-        reAllocDynamicArr(array, array->capacity + (array->capacity / 2));
+        if (!reAllocDynamicArr(array, array->capacity + (array->capacity / 2)))
+        {
+            return false;
+        }
     }
 
     array->data[array->size++] = element;
+    return true;
 }
 
 bool setDynamicArrElement(DynamicArray *array, int index, double value)
@@ -55,14 +73,18 @@ bool setDynamicArrElement(DynamicArray *array, int index, double value)
         return false;
 }
 
-void setDynamicArrRow(DynamicArray *array, const double *row, int size)
+bool setDynamicArrRow(DynamicArray *array, const double *row, int size)
 {
     if (size > array->capacity)
     {
-        reAllocDynamicArr(array, size);
+        if (!reAllocDynamicArr(array, size))
+        {
+            return false;
+        }
     }
     memcpy(array->data, row, size * sizeof(double));
     array->size = size;
+    return true;
 }
 
 
@@ -76,9 +98,14 @@ double getDynamicArrElement(const DynamicArray *array, int index)
     return (index <= array->capacity) ? array->data[index] : 0.0;
 }
 
-void copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
+bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
 {
     double *newData = calloc(source->capacity, sizeof(double));
+    if (newData == NULL)
+    {
+        return false;
+    }
+
     memcpy(newData, source->data, source->size * sizeof(double));
 
     destination->capacity = source->capacity;
@@ -94,6 +121,7 @@ void copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
     }
 
     destination->data = newData;
+    return true;
 }
 
 void clearDynamicArr(DynamicArray *array)

@@ -11,14 +11,14 @@ typedef struct DynamicArray
 } DynamicArray;
 
 DynamicArray* createDynamicArr();
-void reAllocDynamicArr(DynamicArray *arr, int newCapacity);
+bool reAllocDynamicArr(DynamicArray *arr, int newCapacity);
 void freeDynamicArr(DynamicArray *array);
-void pushBackDynamicArr(DynamicArray *array, double element);
+bool pushBackDynamicArr(DynamicArray *array, double element);
 bool setDynamicArrElement(DynamicArray *array, int index, double value);
-void setDynamicArrRow(DynamicArray *array, const double *row, int size);
+bool setDynamicArrRow(DynamicArray *array, const double *row, int size);
 int getDynamicArrSize(const DynamicArray *array);
 double getDynamicArrElement(const DynamicArray *array, int index);
-void copyDynamicArr(DynamicArray *destination, const DynamicArray *source);
+bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source);
 void clearDynamicArr(DynamicArray *array);
 
 // For debug purposes:

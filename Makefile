@@ -19,7 +19,7 @@ LIBRAWCNEURALNETWORK_FILES := \
 	$(UTILS_DIR)/fileIO.c \
 	$(UTILS_DIR)/matrix.c \
 
-all: raw-c-neural-network
+all: raw-c-neural-network utilsTest
 
 raw-c-neural-network: libRawCNeuralNetwork.a
 	gcc $(CFLAGS) -o $(BUILD_DIR)/raw-c-neural-network $(SRC_DIR)/main.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a

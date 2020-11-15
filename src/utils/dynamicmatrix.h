@@ -16,7 +16,7 @@ typedef struct DynamicMatrix
 DynamicMatrix* createDynamicMatrix();
 void freeDynamicMatrix(DynamicMatrix *matrix);
 
-void pushRow(DynamicMatrix *matrix, DynamicArray *row);
+bool pushRow(DynamicMatrix *matrix, DynamicArray *row);
 void pushColumn(DynamicMatrix *matrix, DynamicArray *row);
 void pushRowElement(DynamicMatrix *matrix, int row, double element);
 void pushColumnElement(DynamicMatrix *matrix, int column, double element);
@@ -30,6 +30,7 @@ DynamicArray* getDynamicMatrixColumn(const DynamicMatrix *matrix, int column);
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column);
 
 void transposeDynamicMatrix(DynamicMatrix *matrix);
+void copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source);
 void clearDynamicMatrix(DynamicMatrix *matrix);
 
 // Debug

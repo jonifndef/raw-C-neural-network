@@ -5,20 +5,30 @@
 #include <string.h>
 #include <stdio.h>
 
-static void reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
+static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
 {
     DynamicArray **newData = calloc(newRowCapacity, sizeof(DynamicArray));
+    if (newData == NULL)
+    {
+        return false;
+    }
+
     for (int i = 0; i < newRowCapacity; i++)
     {
         newData[i] = createDynamicArr();
         if (i < matrix->rowCapacity)
         {
-            copyDynamicArr(newData[i], matrix->data[i]);
+            if (!copyDynamicArr(newData[i], matrix->data[i]))
+            {
+                return false;
+            }
         }
     }
+
     freeDynamicMatrix(matrix);
     matrix->data = newData;
     matrix->rowCapacity = newRowCapacity;
+    return true;
 }
 
 //static void reAllocDynamicMatrixColumns(DynamicMatrix *matrix, int newCapacity)
@@ -29,6 +39,11 @@ static void reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
 DynamicMatrix* createDynamicMatrix()
 {
     DynamicMatrix *matrix = calloc(1, sizeof(DynamicMatrix));
+    if (matrix == NULL)
+    {
+        return NULL;
+    }
+
     matrix->rows = 0;
     matrix->columns = 0;
 
@@ -36,9 +51,18 @@ DynamicMatrix* createDynamicMatrix()
     // createDynamicArr() returns a dynamic array of lenght 4
     matrix->rowCapacity = 3;
     matrix->data = calloc(matrix->rowCapacity, sizeof(DynamicArray));
+    if (matrix->data == NULL)
+    {
+        return NULL;
+    }
+
     for (int i = 0; i < matrix->rowCapacity; i++)
     {
         matrix->data[i] = createDynamicArr();
+        if (matrix->data[i] == NULL)
+        {
+            return NULL;
+        }
     }
     // ugly?
     matrix->columnCapacity = matrix->data[0]->capacity;
@@ -55,7 +79,7 @@ void freeDynamicMatrix(DynamicMatrix *matrix)
     free(matrix->data);
 }
 
-void pushRow(DynamicMatrix *matrix, DynamicArray *row)
+bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
 {
     // two cases:
     //  - the length of the new row is longer than the current column capacity
@@ -65,21 +89,33 @@ void pushRow(DynamicMatrix *matrix, DynamicArray *row)
     {
         for (int i = 0; i < matrix->rowCapacity; i++)
         {
-            reAllocDynamicArr(matrix->data[i], getDynamicArrSize(row));
+            if (!reAllocDynamicArr(matrix->data[i], getDynamicArrSize(row)))
+            {
+                return false;
+            }
         }
         matrix->columnCapacity = getDynamicArrSize(row);
     }
 
     if (matrix->rows >= matrix->rowCapacity)
     {
-        reAllocDynamicMatrixRows(matrix, matrix->rowCapacity + (matrix->rowCapacity / 2));
+        if (!reAllocDynamicMatrixRows(matrix, matrix->rowCapacity + (matrix->rowCapacity / 2)))
+        {
+            return false;
+        }
     }
 
-    copyDynamicArr(matrix->data[matrix->rows++], row);
+    if (!copyDynamicArr(matrix->data[matrix->rows++], row))
+    {
+        return false;
+    }
+
     if (getDynamicArrSize(row) > matrix->columns)
     {
         matrix->columns = getDynamicArrSize(row);
     }
+
+    return true;
 }
 
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
