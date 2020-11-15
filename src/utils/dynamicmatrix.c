@@ -118,6 +118,11 @@ bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
     return true;
 }
 
+DynamicArray* getDynamicMatrixRow(const DynamicMatrix *matrix, int row)
+{
+    return (row < matrix->rows && row >= 0) ? matrix->data[row] : NULL;
+}
+
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
 {
     if ((row >= 0 && row <= matrix->rows) &&

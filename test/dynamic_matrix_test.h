@@ -39,6 +39,11 @@ START_TEST(dynamicMatrixTest)
     ck_assert_double_eq(getDynamicMatrixElement(matrix, 3, 2), 2.30);
     ck_assert_double_eq(getDynamicMatrixElement(matrix, 2, 5), 0.0);
 
+    //DynamicArray *arr = calloc(1, sizeof(DynamicArray));
+    //ck_assert_mem_ne(arr, NULL);
+
+    //arr = getDynamicMatrixRow(matrix, 1);
+
     printDynamicMatrix(matrix);
 
     freeDynamicMatrix(matrix);
