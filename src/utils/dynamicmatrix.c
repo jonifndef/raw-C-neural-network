@@ -118,6 +118,50 @@ bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
     return true;
 }
 
+bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
+{
+    // two cases:
+    //  - the length of the new column is longer than the current row capacity
+    //  - the current column capacity is already filled
+
+    if (getDynamicArrSize(column) > matrix->rowCapacity)
+    {
+        if (!reAllocDynamicMatrixRows(matrix, getDynamicArrSize(column)))
+        {
+            return false;
+        }
+        matrix->rowCapacity = getDynamicArrSize(column);
+    }
+
+    if (matrix->columns >= matrix->columnCapacity)
+    {
+        for (int i = 0; i < matrix->rows; i++)
+        {
+            if (!reAllocDynamicArr(matrix->data[i], getDynamicArrSize(column) + (matrix->columnCapacity / 2)))
+            {
+                return false;
+            }
+        }
+        matrix->columnCapacity = getDynamicArrSize(column) + (matrix->columnCapacity / 2);
+    }
+
+    for (int i = 0; i < getDynamicArrSize(column); i++)
+    {
+        if (!pushBackDynamicArr(matrix->data[i], getDynamicArrElement(column, i)))
+        {
+            return false;
+        }
+    }
+    matrix->columns++;
+
+    if (getDynamicArrSize(column) > matrix->rows)
+    {
+        matrix->rows = getDynamicArrSize(column);
+    }
+
+    return true;
+}
+
 DynamicArray* getDynamicMatrixRow(const DynamicMatrix *matrix, int row)
 {
     return (row < matrix->rows && row >= 0) ? matrix->data[row] : NULL;
