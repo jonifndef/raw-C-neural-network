@@ -1,4 +1,4 @@
-CFLAGS := -g -Wall -Wpedantic -O2
+CFLAGS := -g -Wall -Wpedantic #-O2
 SRC_DIR := src
 UTILS_DIR := $(SRC_DIR)/utils
 BUILD_DIR := build

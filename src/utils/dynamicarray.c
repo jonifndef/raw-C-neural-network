@@ -26,6 +26,7 @@ DynamicArray* createDynamicArr()
 
 bool reAllocDynamicArr(DynamicArray *array, int newCapacity)
 {
+    //printf("reallocating dynamic array, newcapacity: %d\n", newCapacity);
     double *newData = calloc(newCapacity, sizeof(double));
     if (newData == NULL)
     {
@@ -87,7 +88,6 @@ bool setDynamicArrRow(DynamicArray *array, const double *row, int size)
     return true;
 }
 
-
 int getDynamicArrSize(const DynamicArray *array)
 {
     return array->size;
@@ -95,7 +95,8 @@ int getDynamicArrSize(const DynamicArray *array)
 
 double getDynamicArrElement(const DynamicArray *array, int index)
 {
-    return (index <= array->capacity) ? array->data[index] : 0.0;
+    //return (index <= array->capacity) ? array->data[index] : 0.0;
+    return (index <= array->capacity) ? array->data[index] : -999;
 }
 
 bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source)

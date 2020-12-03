@@ -31,6 +31,35 @@ static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
     return true;
 }
 
+static bool resizeExistingRows(DynamicMatrix *matrix, DynamicArray *row)
+{
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        // Add padding of 0.0 until all arrays are of same length
+        for (int j = 0; j < (row->size - matrix->columns); j++)
+        {
+            if (!pushBackDynamicArr(matrix->data[i], 0.0))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+static bool resizeNewRow(const DynamicMatrix *matrix, DynamicArray *row)
+{
+    int numElementsToPush = matrix->columns - getDynamicArrSize(row);
+    for (int i = 0; i < numElementsToPush; i++)
+    {
+        if (!pushBackDynamicArr(row, 0.0))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 //static void reAllocDynamicMatrixColumns(DynamicMatrix *matrix, int newCapacity)
 //{
 //
@@ -81,83 +110,99 @@ void freeDynamicMatrix(DynamicMatrix *matrix)
 
 bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
 {
-    // two cases:
-    //  - the length of the new row is longer than the current column capacity
-    //  - the current row capacity is already filled
-
-    if (getDynamicArrSize(row) > matrix->columnCapacity)
+    // Perform a deep copy of the new row, except its capacity
+    DynamicArray *newRow = createDynamicArr();
+    for (int i = 0; i < getDynamicArrSize(row); i++)
     {
-        for (int i = 0; i < matrix->rowCapacity; i++)
-        {
-            if (!reAllocDynamicArr(matrix->data[i], getDynamicArrSize(row)))
-            {
-                return false;
-            }
-        }
-        matrix->columnCapacity = getDynamicArrSize(row);
-    }
-
-    if (matrix->rows >= matrix->rowCapacity)
-    {
-        if (!reAllocDynamicMatrixRows(matrix, matrix->rowCapacity + (matrix->rowCapacity / 2)))
+        if (!pushBackDynamicArr(newRow, getDynamicArrElement(row, i)))
         {
             return false;
         }
     }
 
-    if (!copyDynamicArr(matrix->data[matrix->rows++], row))
+    if (getDynamicArrSize(newRow) > matrix->columns)
+    {
+        if (!resizeExistingRows(matrix, newRow))
+        {
+            return false;
+        }
+    }
+    else if (getDynamicArrSize(newRow) < matrix->columns)
+    {
+        if (!resizeNewRow(matrix, newRow))
+        {
+            return false;
+        }
+    }
+
+    if (matrix->rows >= matrix->rowCapacity)
+    {
+        if (!reAllocDynamicMatrixRows(
+            matrix, matrix->rowCapacity + (matrix->rowCapacity / 2)))
+        {
+            return false;
+        }
+    }
+
+    if (!copyDynamicArr(matrix->data[matrix->rows++], newRow))
     {
         return false;
     }
 
-    if (getDynamicArrSize(row) > matrix->columns)
-    {
-        matrix->columns = getDynamicArrSize(row);
-    }
+    // this should always be valid since we update the size and capacity of the new row everytime
+    matrix->columns = newRow->size;
+    matrix->columnCapacity = newRow->capacity;
 
+    free(newRow);
     return true;
 }
 
 bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
 {
-    // two cases:
-    //  - the length of the new column is longer than the current row capacity
-    //  - the current column capacity is already filled
-
-    if (getDynamicArrSize(column) > matrix->rowCapacity)
+    if (getDynamicArrSize(column) > matrix->rows)
     {
-        if (!reAllocDynamicMatrixRows(matrix, getDynamicArrSize(column)))
+        DynamicArray *row = createDynamicArr();
+        if (row == NULL)
         {
             return false;
         }
-        matrix->rowCapacity = getDynamicArrSize(column);
-    }
 
-    if (matrix->columns >= matrix->columnCapacity)
-    {
-        for (int i = 0; i < matrix->rows; i++)
+        for (int j = 0; j < matrix->columns; j++)
         {
-            if (!reAllocDynamicArr(matrix->data[i], getDynamicArrSize(column) + (matrix->columnCapacity / 2)))
+            if (!pushBackDynamicArr(row, 0.0))
             {
                 return false;
             }
         }
-        matrix->columnCapacity = getDynamicArrSize(column) + (matrix->columnCapacity / 2);
-    }
 
-    for (int i = 0; i < getDynamicArrSize(column); i++)
-    {
-        if (!pushBackDynamicArr(matrix->data[i], getDynamicArrElement(column, i)))
+        for (int i = 0; i < (getDynamicArrSize(column) - matrix->rows); i++)
         {
-            return false;
+            pushRow(matrix, row);
+        }
+        freeDynamicArr(row);
+
+        reAllocDynamicArr(column, matrix->rowCapacity); // this is a weird solution to the problem below, but it needs to be implemented for the pushRow-function
+        // FIXME: rowCapacity will get updated dynamically here, so it won't match the capacity of the 'column' dynamic arr!
+    }
+    else if (getDynamicArrSize(column) < matrix->rows)
+    {
+        for (int i = 0; i < (matrix->rows - getDynamicArrSize(column)); i++)
+        {
+            pushBackDynamicArr(column, 0.0);
         }
     }
-    matrix->columns++;
 
     if (getDynamicArrSize(column) > matrix->rows)
     {
         matrix->rows = getDynamicArrSize(column);
     }
+
+    if (getDynamicArrSize(column) > matrix->columnCapacity)
+    {
+
+    }
+
+    //insert the column here
 
     return true;
 }
@@ -177,7 +222,8 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
     else
     {
         // Hmm...? How to do this in a nicer way? O_o
-        return 0.0;
+        //return 0.0;
+        return -999;
     }
 }
 

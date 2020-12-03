@@ -21,7 +21,7 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *row);
 void pushRowElement(DynamicMatrix *matrix, int row, double element);
 void pushColumnElement(DynamicMatrix *matrix, int column, double element);
 
-void setDynamicMatrixRow(DynamicMatrix *matrix, int rowNum, const DynamicArray *row);
+bool setDynamicMatrixRow(DynamicMatrix *matrix, int rowNum, const DynamicArray *row);
 void setDynamicMatrixColumn(DynamicMatrix *matrix, int columnNum, const DynamicArray *column);
 void setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
 
