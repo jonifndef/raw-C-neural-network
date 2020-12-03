@@ -25,8 +25,8 @@ bool setDynamicMatrixRow(DynamicMatrix *matrix, int rowNum, const DynamicArray *
 void setDynamicMatrixColumn(DynamicMatrix *matrix, int columnNum, const DynamicArray *column);
 void setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
 
-DynamicArray* getDynamicMatrixRow(const DynamicMatrix *matrix, int row);
-DynamicArray* getDynamicMatrixColumn(const DynamicMatrix *matrix, int column);
+DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row);
+DynamicArray* getDynamicMatrixColumnRef(const DynamicMatrix *matrix, int column);
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column);
 
 void transposeDynamicMatrix(DynamicMatrix *matrix);

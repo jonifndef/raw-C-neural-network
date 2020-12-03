@@ -31,12 +31,12 @@ static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
     return true;
 }
 
-static bool resizeExistingRows(DynamicMatrix *matrix, DynamicArray *row)
+static bool resizeExistingRows(DynamicMatrix *matrix, DynamicArray *newRow)
 {
     for (int i = 0; i < matrix->rows; i++)
     {
         // Add padding of 0.0 until all arrays are of same length
-        for (int j = 0; j < (row->size - matrix->columns); j++)
+        for (int j = 0; j < (newRow->size - matrix->columns); j++)
         {
             if (!pushBackDynamicArr(matrix->data[i], 0.0))
             {
@@ -47,12 +47,48 @@ static bool resizeExistingRows(DynamicMatrix *matrix, DynamicArray *row)
     return true;
 }
 
-static bool resizeNewRow(const DynamicMatrix *matrix, DynamicArray *row)
+static bool resizeNewRow(const DynamicMatrix *matrix, DynamicArray *newRow)
 {
-    int numElementsToPush = matrix->columns - getDynamicArrSize(row);
+    int numElementsToPush = matrix->columns - getDynamicArrSize(newRow);
     for (int i = 0; i < numElementsToPush; i++)
     {
-        if (!pushBackDynamicArr(row, 0.0))
+        if (!pushBackDynamicArr(newRow, 0.0))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool resizeExistingColumns(DynamicMatrix *matrix, DynamicArray *newColumn)
+{
+    DynamicArray *paddingArr = createDynamicArr();
+    for (int i = 0; i < matrix->columns; i++)
+    {
+        if (!pushBackDynamicArr(paddingArr, 0.0))
+        {
+            return false;
+        }
+    }
+
+    int numRowsToAdd = getDynamicArrSize(newColumn) - matrix->rows;
+    for (int i = 0; i < numRowsToAdd; i++)
+    {
+        if (!pushRow(matrix, paddingArr))
+        {
+            return false;
+        }
+    }
+    free(paddingArr);
+    return true;
+}
+
+static bool resizeNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
+{
+    int numElementsToPush = matrix->rows - getDynamicArrSize(newColumn);
+    for (int i = 0; i < numElementsToPush; i++)
+    {
+        if (!pushBackDynamicArr(newColumn, 0.0))
         {
             return false;
         }
@@ -76,9 +112,9 @@ DynamicMatrix* createDynamicMatrix()
     matrix->rows = 0;
     matrix->columns = 0;
 
-    // a 3x4 matrix might be suitable as a default size
-    // createDynamicArr() returns a dynamic array of lenght 4
-    matrix->rowCapacity = 3;
+    // a 4x4 matrix might be suitable as a default size
+    // createDynamicArr() returns a dynamic array with a capacity of 4
+    matrix->rowCapacity = 4;
     matrix->data = calloc(matrix->rowCapacity, sizeof(DynamicArray));
     if (matrix->data == NULL)
     {
@@ -159,55 +195,92 @@ bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
 
 bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
 {
-    if (getDynamicArrSize(column) > matrix->rows)
+    // Perform a deep copy of the new column, except its capacity
+    DynamicArray *newColumn = createDynamicArr();
+    for (int i = 0; i < getDynamicArrSize(column); i++)
     {
-        DynamicArray *row = createDynamicArr();
-        if (row == NULL)
+        if (!pushBackDynamicArr(newColumn, getDynamicArrElement(column, i)))
         {
             return false;
         }
-
-        for (int j = 0; j < matrix->columns; j++)
-        {
-            if (!pushBackDynamicArr(row, 0.0))
-            {
-                return false;
-            }
-        }
-
-        for (int i = 0; i < (getDynamicArrSize(column) - matrix->rows); i++)
-        {
-            pushRow(matrix, row);
-        }
-        freeDynamicArr(row);
-
-        reAllocDynamicArr(column, matrix->rowCapacity); // this is a weird solution to the problem below, but it needs to be implemented for the pushRow-function
-        // FIXME: rowCapacity will get updated dynamically here, so it won't match the capacity of the 'column' dynamic arr!
     }
-    else if (getDynamicArrSize(column) < matrix->rows)
+
+    if (getDynamicArrSize(newColumn) > matrix->rows)
     {
-        for (int i = 0; i < (matrix->rows - getDynamicArrSize(column)); i++)
+        if (!resizeExistingColumns(matrix, newColumn))
         {
-            pushBackDynamicArr(column, 0.0);
+            return false;
+        }
+    }
+    else if (getDynamicArrSize(newColumn) < matrix->rows)
+    {
+        if (!resizeNewColumn(matrix, newColumn))
+        {
+            return false;
         }
     }
 
-    if (getDynamicArrSize(column) > matrix->rows)
+    if (matrix->columns >= matrix->columnCapacity)
     {
-        matrix->rows = getDynamicArrSize(column);
+        printf("hey\n");
     }
 
-    if (getDynamicArrSize(column) > matrix->columnCapacity)
-    {
 
-    }
 
-    //insert the column here
+
 
     return true;
+
+
+    //if (getDynamicArrSize(column) > matrix->rows)
+    //{
+    //    DynamicArray *row = createDynamicArr();
+    //    if (row == NULL)
+    //    {
+    //        return false;
+    //    }
+
+    //    for (int j = 0; j < matrix->columns; j++)
+    //    {
+    //        if (!pushBackDynamicArr(row, 0.0))
+    //        {
+    //            return false;
+    //        }
+    //    }
+
+    //    for (int i = 0; i < (getDynamicArrSize(column) - matrix->rows); i++)
+    //    {
+    //        pushRow(matrix, row);
+    //    }
+    //    freeDynamicArr(row);
+
+    //    reAllocDynamicArr(column, matrix->rowCapacity); // this is a weird solution to the problem below, but it needs to be implemented for the pushRow-function
+    //    // FIXME: rowCapacity will get updated dynamically here, so it won't match the capacity of the 'column' dynamic arr!
+    //}
+    //else if (getDynamicArrSize(column) < matrix->rows)
+    //{
+    //    for (int i = 0; i < (matrix->rows - getDynamicArrSize(column)); i++)
+    //    {
+    //        pushBackDynamicArr(column, 0.0);
+    //    }
+    //}
+
+    //if (getDynamicArrSize(column) > matrix->rows)
+    //{
+    //    matrix->rows = getDynamicArrSize(column);
+    //}
+
+    //if (getDynamicArrSize(column) > matrix->columnCapacity)
+    //{
+
+    //}
+
+    ////insert the column here
+
+    //return true;
 }
 
-DynamicArray* getDynamicMatrixRow(const DynamicMatrix *matrix, int row)
+DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row)
 {
     return (row < matrix->rows && row >= 0) ? matrix->data[row] : NULL;
 }

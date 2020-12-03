@@ -42,7 +42,7 @@ START_TEST(dynamicMatrixTest)
 
     // Make sure the content of the second row of the matrix
     // is the same as its 'source array'
-    copyDynamicArr(arr4, getDynamicMatrixRow(matrix, 1));
+    copyDynamicArr(arr4, getDynamicMatrixRowRef(matrix, 1));
     ck_assert_mem_eq(arr4->data, arr1->data, getDynamicArrSize(arr1));
     ck_assert_int_eq(arr4->size, arr1->size);
     ck_assert_int_eq(arr4->capacity, arr1->capacity);
@@ -53,7 +53,7 @@ START_TEST(dynamicMatrixTest)
 
     // Make sure that the length of the third row of the matrix
     // is longer than its 'source array', since the row should be padded with zeroes
-    copyDynamicArr(arr5, getDynamicMatrixRow(matrix, 2));
+    copyDynamicArr(arr5, getDynamicMatrixRowRef(matrix, 2));
     ck_assert_int_ne(arr5->size, arr2->size);
     ck_assert_mem_ne(arr5->data, arr2->data, sizeof(double) * getDynamicArrSize(arr5));
     freeDynamicArr(arr2);
@@ -63,18 +63,18 @@ START_TEST(dynamicMatrixTest)
 
     printDynamicMatrix(matrix);
 
-//    double column6[] = { 2.51, 0.009, 1093.1, 4.0, 0.63 };
-//    DynamicArray *arr6 = createDynamicArr();
-//    setDynamicArrRow(arr6, column6, 5);
-//    pushColumn(matrix, arr6);
-//    pushColumn(matrix, arr6);
-//    pushColumn(matrix, arr6);
-//    pushColumn(matrix, arr6);
-//    pushColumn(matrix, arr6);
-//    freeDynamicArr(arr6);
-//
-//    printDynamicMatrix(matrix);
-//
+    double column6[] = { 2.51, 0.009, 1093.1, 4.0, 0.63 };
+    DynamicArray *arr6 = createDynamicArr();
+    setDynamicArrRow(arr6, column6, 5);
+    pushColumn(matrix, arr6);
+    //pushColumn(matrix, arr6);
+    //pushColumn(matrix, arr6);
+    //pushColumn(matrix, arr6);
+    //pushColumn(matrix, arr6);
+    freeDynamicArr(arr6);
+
+    printDynamicMatrix(matrix);
+
     freeDynamicMatrix(matrix);
 }
 END_TEST
