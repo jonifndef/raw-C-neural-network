@@ -96,10 +96,22 @@ static bool resizeNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
     return true;
 }
 
-//static void reAllocDynamicMatrixColumns(DynamicMatrix *matrix, int newCapacity)
-//{
-//
-//}
+static bool insertNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
+{
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        if (!pushBackDynamicArr(getDynamicMatrixRowRef(matrix, i),
+                                getDynamicArrElement(newColumn, i)))
+        {
+            return false;
+        }
+    }
+    matrix->columns++;
+    // U G L Y
+    // what if there are no rows yet? This column might have been pushed to an empty matrix
+    matrix->columnCapacity = getDynamicMatrixRowRef(matrix, 0)->capacity;
+    return true;
+}
 
 DynamicMatrix* createDynamicMatrix()
 {
@@ -195,6 +207,9 @@ bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
 
 bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
 {
+    // What if a column get pushed to an empty matrix?
+
+
     // Perform a deep copy of the new column, except its capacity
     DynamicArray *newColumn = createDynamicArr();
     for (int i = 0; i < getDynamicArrSize(column); i++)
@@ -220,11 +235,10 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
         }
     }
 
-    if (matrix->columns >= matrix->columnCapacity)
+    if (!insertNewColumn(matrix, newColumn))
     {
-        printf("hey\n");
+        return false;
     }
-
 
 
 
