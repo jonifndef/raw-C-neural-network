@@ -141,5 +141,5 @@ void printDynamicArr(const DynamicArray *array)
     {
         printf("%.3f ", array->data[i]);
     }
-    printf("\n");
+    printf("\n\n");
 }
