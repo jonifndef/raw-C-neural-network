@@ -26,7 +26,7 @@ void setDynamicMatrixColumn(DynamicMatrix *matrix, int columnNum, const DynamicA
 void setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
 
 DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row);
-DynamicArray* getDynamicMatrixColumnRef(const DynamicMatrix *matrix, int column);
+DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int column);
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column);
 
 void transposeDynamicMatrix(DynamicMatrix *matrix);

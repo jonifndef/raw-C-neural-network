@@ -98,6 +98,16 @@ static bool resizeNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
 
 static bool insertNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
 {
+    // if empty matrix
+    if (matrix->rows == 0)
+    {
+        DynamicArray *arr = createDynamicArr();
+        for (int i = 0; i < getDynamicArrSize(newColumn); i++)
+        {
+            pushRow(matrix, arr);
+        }
+    }
+
     for (int i = 0; i < matrix->rows; i++)
     {
         if (!pushBackDynamicArr(getDynamicMatrixRowRef(matrix, i),
@@ -108,7 +118,6 @@ static bool insertNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
     }
     matrix->columns++;
     // U G L Y
-    // what if there are no rows yet? This column might have been pushed to an empty matrix
     matrix->columnCapacity = getDynamicMatrixRowRef(matrix, 0)->capacity;
     return true;
 }
@@ -257,11 +266,8 @@ DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row)
     return (row < matrix->rows && row >= 0) ? matrix->data[row] : NULL;
 }
 
-DynamicArray* getDynamicMatrixColumnRef(const DynamicMatrix *matrix, int column)
+DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int column)
 {
-    // MEMORY LEAK GALORE
-    // Also, won't work when passed to setDynamicMatrixElement()
-    // Consider renaming to getDynamicMatrixColumnCopy()
     if (column < matrix->columns && column >= 0)
     {
         DynamicArray *array = calloc(1, sizeof(DynamicArray));

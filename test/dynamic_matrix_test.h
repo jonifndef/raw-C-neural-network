@@ -33,7 +33,6 @@ START_TEST(dynamicMatrixTest)
     setDynamicArrRow(arr3, row3, 3);
     pushRow(matrix, arr3);
     pushRow(matrix, arr3);
-    freeDynamicArr(arr3);
 
     ck_assert_double_eq(getDynamicMatrixElement(matrix, 4, 2), 2.30);
     ck_assert_double_eq(getDynamicMatrixElement(matrix, 2, 5), 0.0);
@@ -73,8 +72,6 @@ START_TEST(dynamicMatrixTest)
 
     printDynamicMatrix(matrix);
 
-    //printDynamicMatrix(matrix);
-
     // Insert some columns
     double column6[] = { 2.51, 0.009, 1093.1, 4.0, 0.63 };
     DynamicArray *arr6 = createDynamicArr();
@@ -82,33 +79,42 @@ START_TEST(dynamicMatrixTest)
     pushColumn(matrix, arr6);
     pushColumn(matrix, arr6);
     pushColumn(matrix, arr6);
-    freeDynamicArr(arr6);
 
     double column7[] = { 4.76, 1.25, 9.01 };
     DynamicArray *arr7 = createDynamicArr();
     setDynamicArrRow(arr7, column7, 3);
     pushColumn(matrix, arr7);
-    freeDynamicArr(arr7);
 
     double column8[] = { 1.01, 2.02, 3.03, 4.04, 5.05, 2.52, 3.12, 7.57, 0.01 };
     DynamicArray *arr8 = createDynamicArr();
     setDynamicArrRow(arr8, column8, 9);
     pushColumn(matrix, arr8);
-    freeDynamicArr(arr8);
 
     ck_assert_int_eq(matrix->columnCapacity, getDynamicMatrixRowRef(matrix, 0)->capacity);
 
-
-    DynamicArray *column9 = getDynamicMatrixColumnRef(matrix, 2);
+    DynamicArray *column9 = createDynamicMatrixColumnCopy(matrix, 2);
     printDynamicArr(column9);
     setDynamicArrElement(column9, 0, 66.66);
 
+    freeDynamicArr(column9);
 
-    printDynamicMatrix(matrix);
+    //printDynamicMatrix(matrix);
     freeDynamicMatrix(matrix);
 
+    // ============================================== //
 
     matrix = createDynamicMatrix();
+    pushColumn(matrix, arr7);
+    pushColumn(matrix, arr8);
+    pushColumn(matrix, arr8);
+    pushColumn(matrix, arr6);
+    pushRow(matrix, arr3);
+    printDynamicMatrix(matrix);
+
+    freeDynamicArr(arr3);
+    freeDynamicArr(arr6);
+    freeDynamicArr(arr7);
+    freeDynamicArr(arr8);
 }
 END_TEST
 
