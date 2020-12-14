@@ -86,6 +86,44 @@ START_TEST(dynamicArrTest)
 
     ck_assert_int_eq(getDynamicArrSize(arr2), 5);
 
+    printDynamicArr(arr2);
+
+    insertDynamicArr(arr2, 2, 10.5);
+    insertDynamicArr(arr2, 0, 5.05);
+    bool retVal1 = insertDynamicArr(arr2, 6, 20.05);
+    bool retVal2 = insertDynamicArr(arr2, 8, 25.05);
+
+    ck_assert_int_eq(retVal1, 1);
+    ck_assert_int_eq(retVal2, 0);
+
+    ck_assert_double_eq(getDynamicArrElement(arr2, 6), 20.05);
+    ck_assert_double_eq(getDynamicArrElement(arr2, 4), 1.780);
+    ck_assert_int_eq(getDynamicArrSize(arr2), 8);
+
+    insertDynamicArr(arr2, 8, 20.05);
+    printDynamicArr(arr2);
+
+    popDynamicArr(arr2);
+
+    ck_assert_double_eq(backDynamicArr(arr2), 20.05);
+
+    popDynamicArr(arr2);
+
+    ck_assert_double_eq(backDynamicArr(arr2), 2.67);
+    ck_assert_int_eq(getDynamicArrSize(arr2), 6);
+    ck_assert_double_eq(frontDynamicArr(arr2), 5.05);
+
+    eraseDynamicArr(arr2, 1);
+    ck_assert_double_eq(getDynamicArrElement(arr2, 1), 0.890);
+    ck_assert_int_eq(getDynamicArrSize(arr2), 5);
+
+    ck_assert_double_eq(getDynamicArrElement(arr2, 3), 1.78);
+    eraseDynamicArr(arr2, 3);
+    ck_assert_int_eq(getDynamicArrSize(arr2), 4);
+    ck_assert_double_eq(getDynamicArrElement(arr2, 3), 2.670);
+
+    printDynamicArr(arr2);
+
     freeDynamicArr(arr2);
 }
 END_TEST

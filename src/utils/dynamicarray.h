@@ -16,7 +16,8 @@ DynamicArray* createDynamicArr();
 void freeDynamicArr(DynamicArray *array);
 
 bool pushBackDynamicArr(DynamicArray *array, double element);
-bool insert(DynamicArray *array, int position, double element);
+bool insertDynamicArr(DynamicArray *array, int position, double element);
+bool eraseDynamicArr(DynamicArray *array, int position);
 void popDynamicArr(DynamicArray *array);
 
 bool setDynamicArrElement(DynamicArray *array, int index, double value);

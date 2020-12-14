@@ -210,10 +210,6 @@ bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
     matrix->columns = newRow->size;
     matrix->columnCapacity = newRow->capacity;
 
-    printf("=== new row size:%d, capacity: %d\n", newRow->size, newRow->capacity);
-    printf("=== matrix rows: %d, rowCapacity: %d\n", matrix->rows, matrix->rowCapacity);
-    printf("=== matrix columns: %d, columnCapacity: %d\n", matrix->columns, matrix->columnCapacity);
-
     free(newRow);
     return true;
 }
@@ -252,11 +248,6 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
     {
         return false;
     }
-
-    printf("=== new column size:%d, capacity: %d\n", newColumn->size, newColumn->capacity);
-    printf("=== matrix rows: %d, rowCapacity: %d\n", matrix->rows, matrix->rowCapacity);
-    printf("=== matrix columns: %d, columnCapacity: %d\n", matrix->columns, matrix->columnCapacity);
-
 
     return true;
 }

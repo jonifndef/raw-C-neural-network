@@ -21,6 +21,25 @@ static bool insertAndMoveDynamicArr(DynamicArray *array,
     array->data[position] = element;
     array->size++;
 
+    free(arrCopy);
+    return true;
+}
+
+static bool eraseAndMoveDynamicArr(DynamicArray *array, int position)
+{
+    DynamicArray *arrCopy = createDynamicArr();
+    if (!copyDynamicArr(arrCopy, array))
+    {
+        return false;
+    }
+
+    for (int i = position; i < array->size; i++)
+    {
+        array->data[i] = arrCopy->data[i + 1];
+    }
+    array->size--;
+
+    free(arrCopy);
     return true;
 }
 
@@ -83,32 +102,36 @@ bool pushBackDynamicArr(DynamicArray *array, double element)
     return true;
 }
 
-bool insert(DynamicArray *array, int position, double element)
+bool insertDynamicArr(DynamicArray *array, int position, double element)
 {
     if (position < array->size && position >= 0)
     {
-        if (position == array->size - 1)
+        if (array->size >= array->capacity)
         {
-            if (!pushBackDynamicArr(array, element))
+            if (!reAllocDynamicArr(array, array->capacity + (array->capacity / 2)))
             {
                 return false;
             }
         }
-        else
+        if (!insertAndMoveDynamicArr(array, position, element))
         {
-            if (array->size >= array->capacity)
-            {
-                if (!reAllocDynamicArr(array, array->capacity + (array->capacity / 2)))
-                {
-                    return false;
-                }
-            }
-            if (!insertAndMoveDynamicArr(array, position, element))
-            {
-                return false;
-            }
-            return true;
+            return false;
         }
+        return true;
+    }
+    return false;
+}
+
+bool eraseDynamicArr(DynamicArray *array, int position)
+{
+
+    if (position < array->size && position >= 0)
+    {
+        if (!eraseAndMoveDynamicArr(array, position))
+        {
+            return false;
+        }
+        return true;
     }
     return false;
 }
