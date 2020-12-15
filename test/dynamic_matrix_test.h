@@ -115,6 +115,11 @@ START_TEST(dynamicMatrixTest)
     freeDynamicArr(arr6);
     freeDynamicArr(arr7);
     freeDynamicArr(arr8);
+
+    pushRowElement(matrix, 4, 0.360);
+    pushColumnElement(matrix, 1, 0.894);
+
+    printDynamicMatrix(matrix);
 }
 END_TEST
 

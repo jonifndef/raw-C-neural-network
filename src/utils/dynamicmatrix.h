@@ -18,11 +18,16 @@ void freeDynamicMatrix(DynamicMatrix *matrix);
 
 bool pushRow(DynamicMatrix *matrix, DynamicArray *row);
 bool pushColumn(DynamicMatrix *matrix, DynamicArray *row);
-void pushRowElement(DynamicMatrix *matrix, int row, double element);
-void pushColumnElement(DynamicMatrix *matrix, int column, double element);
+bool pushRowElement(DynamicMatrix *matrix, int row, double element);
+bool pushColumnElement(DynamicMatrix *matrix, int column, double element);
 
-bool setDynamicMatrixRow(DynamicMatrix *matrix, int rowNum, const DynamicArray *row);
-void setDynamicMatrixColumn(DynamicMatrix *matrix, int columnNum, const DynamicArray *column);
+bool insertDynamicMatrixRow();
+bool insertDynamicMatrixColumn();
+bool eraseDynamicMatrixRow();
+bool eraseDynamicMatrixColumn();
+
+bool setDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, const DynamicArray *row);
+bool setDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, const DynamicArray *column);
 void setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
 
 DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row);
