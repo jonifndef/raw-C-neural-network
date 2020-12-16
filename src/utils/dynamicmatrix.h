@@ -35,7 +35,7 @@ DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int col
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column);
 
 void transposeDynamicMatrix(DynamicMatrix *matrix);
-void copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source);
+bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source);
 void clearDynamicMatrix(DynamicMatrix *matrix);
 
 // Debug
