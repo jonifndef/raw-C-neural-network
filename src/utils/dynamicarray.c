@@ -203,15 +203,7 @@ bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
     destination->capacity = source->capacity;
     destination->size = source->size;
 
-    // This memory might not be pointing to anything if it's a brand new array
-    // but is has definitively been allocated with a call to createDynamicArray()
-    // if capacity is set to the default value,
-    // so free it to not have it dangeling
-    if (destination->capacity == 4)
-    {
-        free(destination->data);
-    }
-
+    free(destination->data);
     destination->data = newData;
     return true;
 }

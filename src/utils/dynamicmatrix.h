@@ -28,7 +28,7 @@ bool eraseDynamicMatrixColumn();
 
 bool setDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, const DynamicArray *row);
 bool setDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, const DynamicArray *column);
-void setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
+bool setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
 
 DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row);
 DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int column);

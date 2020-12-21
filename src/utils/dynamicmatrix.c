@@ -126,20 +126,32 @@ static bool insertAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
                                            int rowPosition,
                                            DynamicArray *row)
 {
-    DynamicArray *rowCopy = createDynamicArr();
-    if (rowCopy == NULL)
+    DynamicMatrix *matrixCopy = createDynamicMatrix();
+    if (matrixCopy == NULL)
     {
         return false;
     }
 
-    copyDynamicArr(rowCopy, row);
-
-    for (int i = 0; i < matrix->rows; i++)
+    if (!copyDynamicMatrix(matrixCopy, matrix))
     {
-
+        return false;
     }
 
-    return false;
+    for (int i = rowPosition; i < matrix->rows; i++)
+    {
+        if (!copyDynamicArr(matrix->data[i + 1], matrixCopy->data[i]))
+        {
+            return false;
+        }
+    }
+
+    if (!copyDynamicArr(getDynamicMatrixRowRef(matrix, rowPosition), row))
+    {
+        return false;
+    }
+    matrix->rows++;
+
+    return true;
 }
 
 DynamicMatrix* createDynamicMatrix()
@@ -354,6 +366,16 @@ bool insertDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, DynamicArray
     return false;
 }
 
+bool setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element)
+{
+    if ((row > matrix->rows || row < 0) || (column > matrix->columns || column < 0))
+    {
+        return false;
+    }
+    matrix->data[row]->data[column] = element;
+    return true;
+}
+
 DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row)
 {
     return (row < matrix->rows && row >= 0) ? matrix->data[row] : NULL;
@@ -424,10 +446,32 @@ bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
         else
         {
             destination->data[i] = calloc(1, sizeof(DynamicArray));
+            if (destination->data[i] == NULL)
+            {
+                return false;
+            }
+
             destination->data[i]->data = calloc(destination->columnCapacity, sizeof(double));
+            if (destination->data[i]->data == NULL)
+            {
+                return false;
+            }
+            destination->data[i]->capacity = destination->columnCapacity;
+            destination->data[i]->size = 0;
         }
     }
     return true;
+}
+
+void clearDynamicMatrix(DynamicMatrix *matrix)
+{
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        for (int j = 0; j < matrix->columns; j++)
+        {
+            setDynamicMatrixElement(matrix, i, j, 0.0);
+        }
+    }
 }
 
 void printDynamicMatrix(DynamicMatrix *matrix)
