@@ -7,7 +7,7 @@
 
 static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
 {
-    DynamicArray **newData = calloc(newRowCapacity, sizeof(DynamicArray));
+    DynamicArray **newData = calloc(newRowCapacity, sizeof(DynamicArray*));
     if (newData == NULL)
     {
         return false;
@@ -25,7 +25,9 @@ static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
         }
     }
 
+    printf("calling freedynamicmatrix from reallocdynamicmatrixrows\n");
     freeDynamicMatrix(matrix);
+    matrix = calloc(1, sizeof(DynamicMatrix));
     matrix->data = newData;
     matrix->rowCapacity = newRowCapacity;
     return true;
@@ -168,7 +170,7 @@ DynamicMatrix* createDynamicMatrix()
     // a 4x4 matrix might be suitable as a default size
     // createDynamicArr() returns a dynamic array with a capacity of 4
     matrix->rowCapacity = 4;
-    matrix->data = calloc(matrix->rowCapacity, sizeof(DynamicArray));
+    matrix->data = calloc(matrix->rowCapacity, sizeof(DynamicArray*));
     if (matrix->data == NULL)
     {
         return NULL;
@@ -192,9 +194,12 @@ void freeDynamicMatrix(DynamicMatrix *matrix)
 {
     for (int i = 0; i < matrix->rowCapacity; i++)
     {
+        printf("before free in for-loop\n");
         freeDynamicArr(matrix->data[i]);
     }
+    printf("before free matrix->data\n");
     free(matrix->data);
+    free(matrix);
 }
 
 bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
@@ -416,8 +421,10 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
 bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
 {
     // this assumes that the matrix was created with createDynamicMatrix()
+    printf("calling freedynamicmatrix from copydynamicmatrix\n");
     freeDynamicMatrix(destination);
 
+    printf("wait a second...\n");
     destination = calloc(1, sizeof(DynamicMatrix));
     if (destination == NULL)
     {
@@ -428,7 +435,7 @@ bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
     destination->rowCapacity = source->rowCapacity;
     destination->columnCapacity = source->columnCapacity;
 
-    destination->data = calloc(destination->rowCapacity, sizeof(DynamicArray));
+    destination->data = calloc(destination->rowCapacity, sizeof(DynamicArray*));
     if (destination->data == NULL)
     {
         return false;
