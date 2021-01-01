@@ -45,7 +45,6 @@ static bool eraseAndMoveDynamicArr(DynamicArray *array, int position)
 
 bool reAllocDynamicArr(DynamicArray *array, int newCapacity)
 {
-    //printf("reallocating dynamic array, newcapacity: %d\n", newCapacity);
     double *newData = calloc(newCapacity, sizeof(double));
     if (newData == NULL)
     {

@@ -348,10 +348,13 @@ START_TEST(dynamicMatrixTest)
     ck_assert_int_eq(matrix->rowCapacity, matrixCopy->rowCapacity);
     ck_assert_int_eq(matrix->columnCapacity, matrixCopy->columnCapacity);
 
+    freeDynamicMatrix(matrix);
+
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 0), 4.76);
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 1), 1.01);
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 2), 1.01);
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 3), 2.51);
+    // this should not be here, right? It should only have 4 columns??
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 4), 0.0);
 
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 0), 1.25);
@@ -408,11 +411,28 @@ START_TEST(dynamicMatrixTest)
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 3), 0.0);
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 4), 0.0);
 
+    printDynamicMatrix(matrixCopy);
 
-    pushRowElement(matrix, 4, 0.360);
-    pushColumnElement(matrix, 1, 0.894);
+    pushRowElement(matrixCopy, 4, 0.360);
+    pushColumnElement(matrixCopy, 1, 0.894);
 
-    printDynamicMatrix(matrix);
+    ck_assert_int_eq(matrixCopy->rows, 11);
+    ck_assert_int_eq(matrixCopy->columns, 5);
+
+    printDynamicMatrix(matrixCopy);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 5), 0.36);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 5), 0.0);
 }
 END_TEST
 

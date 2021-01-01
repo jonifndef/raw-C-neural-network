@@ -5,6 +5,15 @@
 #include <string.h>
 #include <stdio.h>
 
+static void freeDynamicMatrixData(DynamicMatrix *matrix)
+{
+    for (int i = 0; i < matrix->rowCapacity; i++)
+    {
+        freeDynamicArr(matrix->data[i]);
+    }
+    free(matrix->data);
+}
+
 static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
 {
     DynamicArray **newData = calloc(newRowCapacity, sizeof(DynamicArray*));
@@ -24,10 +33,8 @@ static bool reAllocDynamicMatrixRows(DynamicMatrix *matrix, int newRowCapacity)
             }
         }
     }
+    freeDynamicMatrixData(matrix);
 
-    printf("calling freedynamicmatrix from reallocdynamicmatrixrows\n");
-    freeDynamicMatrix(matrix);
-    matrix = calloc(1, sizeof(DynamicMatrix));
     matrix->data = newData;
     matrix->rowCapacity = newRowCapacity;
     return true;
@@ -192,13 +199,7 @@ DynamicMatrix* createDynamicMatrix()
 
 void freeDynamicMatrix(DynamicMatrix *matrix)
 {
-    for (int i = 0; i < matrix->rowCapacity; i++)
-    {
-        printf("before free in for-loop\n");
-        freeDynamicArr(matrix->data[i]);
-    }
-    printf("before free matrix->data\n");
-    free(matrix->data);
+    freeDynamicMatrixData(matrix);
     free(matrix);
 }
 
@@ -413,7 +414,6 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
     else
     {
         // Hmm...? How to do this in a nicer way? O_o
-        //return 0.0;
         return -999;
     }
 }
@@ -421,15 +421,8 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
 bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
 {
     // this assumes that the matrix was created with createDynamicMatrix()
-    printf("calling freedynamicmatrix from copydynamicmatrix\n");
-    freeDynamicMatrix(destination);
+    freeDynamicMatrixData(destination);
 
-    printf("wait a second...\n");
-    destination = calloc(1, sizeof(DynamicMatrix));
-    if (destination == NULL)
-    {
-        return false;
-    }
     destination->rows = source->rows;
     destination->columns = source->columns;
     destination->rowCapacity = source->rowCapacity;
@@ -439,6 +432,15 @@ bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
     if (destination->data == NULL)
     {
         return false;
+    }
+
+    for (int i = 0; i < destination->rowCapacity; i++)
+    {
+        destination->data[i] = createDynamicArr();
+        if (destination->data[i] == NULL)
+        {
+            return false;
+        }
     }
 
     for (int i = 0; i < destination->rowCapacity; i++)

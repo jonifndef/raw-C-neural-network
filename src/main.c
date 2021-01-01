@@ -9,6 +9,32 @@
 
 int main(int argc, char *argv[])
 {
+    //DynamicMatrix *matrix1 = calloc(1, sizeof(DynamicMatrix));
+    //matrix1->rows = 0;
+    //matrix1->columns = 0;
+    //matrix1->rowCapacity = 4;
+    //matrix1->data = calloc(matrix1->rowCapacity, sizeof(DynamicArray*));
+    //for (int i = 0; i < matrix1->rowCapacity; i++)
+    //{
+    //    matrix1->data[i] = createDynamicArr();
+    //}
+    //matrix1->columnCapacity = matrix1->data[0]->capacity;
+
+    //for (int i = 0; i < matrix1->rowCapacity; i++)
+    //{
+    //    printf("before free in for-loop\n");
+    //    freeDynamicArr(matrix1->data[i]);
+    //}
+    //printf("before free matrix->data\n");
+    //free(matrix1->data);
+    //free(matrix1);
+
+    //matrix1 = calloc(1, sizeof(DynamicMatrix));
+
+    //return 0;
+
+    //===============//
+
     DynamicMatrix *matrix = createDynamicMatrix();
 
     double row0[] = { 3.24, 1.2, 66.359, 7.0, 0.0, 1.445 };
@@ -38,7 +64,6 @@ int main(int argc, char *argv[])
     // Make sure the content of the second row of the matrix
     // is the same as its 'source array'
     copyDynamicArr(arr4, getDynamicMatrixRowRef(matrix, 1));
-
 
     freeDynamicArr(arr1);
 
@@ -111,7 +136,7 @@ int main(int argc, char *argv[])
     pushColumn(matrix, arr8); //9
     pushColumn(matrix, arr8); //9
     pushColumn(matrix, arr6); //5
-    pushRow(matrix, arr3); //3
+    pushRow(matrix, arr3);    //3
     printDynamicMatrix(matrix);
 
     // 10x4
@@ -126,13 +151,24 @@ int main(int argc, char *argv[])
     freeDynamicArr(arr7);
     freeDynamicArr(arr8);
 
+    printf("matrix columns: %d\n", matrix->columns);
+    printf("matrix columnCapacity: %d\n", matrix->columnCapacity);
+    printf("matrix column 5: %f\n", matrix->data[0]->data[17]);
+
     DynamicMatrix *matrixCopy = createDynamicMatrix();
     copyDynamicMatrix(matrixCopy, matrix);
+    freeDynamicMatrix(matrix);
 
-    pushRowElement(matrix, 4, 0.360);
-    pushColumnElement(matrix, 1, 0.894);
+    printf("matrixCopy columns: %d\n", matrixCopy->columns);
+    printf("matrixCopy columnCapacity: %d\n", matrixCopy->columnCapacity);
+    printf("matrixCopy column 5: %f\n", matrixCopy->data[0]->data[17]);
 
-    printDynamicMatrix(matrix);
+    bool res1 = pushRowElement(matrixCopy, 4, 0.360);
+    bool res2 = pushColumnElement(matrixCopy, 1, 0.894);
+
+    printf("res1: %d, res2: %d\n", res1, res2);
+
+    printDynamicMatrix(matrixCopy);
 
     return 0;
 
