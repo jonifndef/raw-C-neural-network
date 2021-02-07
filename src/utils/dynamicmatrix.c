@@ -406,13 +406,14 @@ DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int col
 
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
 {
-    if ((row >= 0 && row <= matrix->rows) &&
-        (column >= 0 && column <= matrix->columns))
+    if ((row >= 0 && row < matrix->rows) &&
+        (column >= 0 && column < matrix->columns))
     {
         return getDynamicArrElement(matrix->data[row], column);
     }
     else
     {
+        printf("well, we ought to return -999 now...\n");
         // Hmm...? How to do this in a nicer way? O_o
         return -999;
     }

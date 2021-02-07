@@ -9,30 +9,215 @@
 
 int main(int argc, char *argv[])
 {
-    //DynamicMatrix *matrix1 = calloc(1, sizeof(DynamicMatrix));
-    //matrix1->rows = 0;
-    //matrix1->columns = 0;
-    //matrix1->rowCapacity = 4;
-    //matrix1->data = calloc(matrix1->rowCapacity, sizeof(DynamicArray*));
-    //for (int i = 0; i < matrix1->rowCapacity; i++)
-    //{
-    //    matrix1->data[i] = createDynamicArr();
-    //}
-    //matrix1->columnCapacity = matrix1->data[0]->capacity;
+    // ============================================== //
+    //                   new matrix                   //
+    // ============================================== //
+    double row3[] = { 2.78, 49.98, 2.30 };
+    DynamicArray *arr3 = createDynamicArr();
+    setDynamicArrRow(arr3, row3, 3);
 
-    //for (int i = 0; i < matrix1->rowCapacity; i++)
-    //{
-    //    printf("before free in for-loop\n");
-    //    freeDynamicArr(matrix1->data[i]);
-    //}
-    //printf("before free matrix->data\n");
-    //free(matrix1->data);
-    //free(matrix1);
+    double column6[] = { 2.51, 0.009, 1093.1, 4.0, 0.63 };
+    DynamicArray *arr6 = createDynamicArr();
+    setDynamicArrRow(arr6, column6, 5);
 
-    //matrix1 = calloc(1, sizeof(DynamicMatrix));
+    double column7[] = { 4.76, 1.25, 9.01 };
+    DynamicArray *arr7 = createDynamicArr();
+    setDynamicArrRow(arr7, column7, 3);
 
-    //return 0;
+    double column8[] = { 1.01, 2.02, 3.03, 4.04, 5.05, 2.52, 3.12, 7.57, 0.01 };
+    DynamicArray *arr8 = createDynamicArr();
+    setDynamicArrRow(arr8, column8, 9);
 
+    DynamicMatrix *matrix = createDynamicMatrix();
+    pushColumn(matrix, arr7); //3
+    pushColumn(matrix, arr8); //9
+    pushColumn(matrix, arr8); //9
+    pushColumn(matrix, arr6); //5
+    pushRow(matrix, arr3); //3
+    printDynamicMatrix(matrix);
+
+    // 10x4
+    //
+    // arr7: 4.76, 1.25, 9.01
+    // arr8: 1.01, 2.02, 3.03, 4.04, 5.05, 2.52, 3.12, 7.57, 0.01
+    // arr6: 2.51, 0.009, 1093.1, 4.0, 0.63
+    // arr3: 2.78, 49.98, 2.30
+    //
+    // Resulting matrix should look as follows:
+    //  4.76   1.01   1.01   2.51
+    //  1.25   2.02   2.02   0.009
+    //  9.01   3.03   3.03   1093.1
+    //  0.0    4.04   4.04   4.0
+    //  0.0    5.05   5.05   0.63
+    //  0.0    2.52   2.52   0.0
+    //  0.0    3.12   3.12   0.0
+    //  0.0    7.57   7.57   0.0
+    //  0.0    0.01   0.01   0.0
+    //  2.78   49.98  2.30   0.0
+
+    printf("matrix->rows: %d", matrix->rows);
+    printf("matrix->columns: %d", matrix->columns);
+
+    printf("matrix, 0, 0), 4.76: %f\n",  getDynamicMatrixElement(matrix, 0, 0));
+    printf("matrix, 0, 1), 1.01: %f\n",  getDynamicMatrixElement(matrix, 0, 1));
+    printf("matrix, 0, 2), 1.01: %f\n",  getDynamicMatrixElement(matrix, 0, 2));
+    printf("matrix, 0, 3), 2.51: %f\n",  getDynamicMatrixElement(matrix, 0, 3));
+    printf("matrix, 0, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 0, 4));
+
+    printf("matrix, 1, 0), 1.25: %f\n",  getDynamicMatrixElement(matrix, 1, 0));
+    printf("matrix, 1, 1), 2.02: %f\n",  getDynamicMatrixElement(matrix, 1, 1));
+    printf("matrix, 1, 2), 2.02: %f\n",  getDynamicMatrixElement(matrix, 1, 2));
+    printf("matrix, 1, 3), 0.009: %f\n", getDynamicMatrixElement(matrix, 1, 3));
+    printf("matrix, 1, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 1, 4));
+
+    printf("matrix, 2, 0), 9.01: %f\n",  getDynamicMatrixElement(matrix, 2, 0));
+    printf("matrix, 2, 1), 3.03: %f\n",  getDynamicMatrixElement(matrix, 2, 1));
+    printf("matrix, 2, 2), 3.03: %f\n",  getDynamicMatrixElement(matrix, 2, 2));
+    printf("matrix, 2, 3), 1093.1: %f\n",getDynamicMatrixElement(matrix, 2, 3));
+    printf("matrix, 2, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 2, 4));
+
+    printf("matrix, 3, 0), 0.0: %f\n",   getDynamicMatrixElement(matrix, 3, 0));
+    printf("matrix, 3, 1), 4.04: %f\n",  getDynamicMatrixElement(matrix, 3, 1));
+    printf("matrix, 3, 2), 4.04: %f\n",  getDynamicMatrixElement(matrix, 3, 2));
+    printf("matrix, 3, 3), 4.0: %f\n",   getDynamicMatrixElement(matrix, 3, 3));
+    printf("matrix, 3, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 3, 4));
+
+    printf("matrix, 4, 0), 0.0: %f\n",   getDynamicMatrixElement(matrix, 4, 0));
+    printf("matrix, 4, 1), 5.05: %f\n",  getDynamicMatrixElement(matrix, 4, 1));
+    printf("matrix, 4, 2), 5.05: %f\n",  getDynamicMatrixElement(matrix, 4, 2));
+    printf("matrix, 4, 3), 0.63: %f\n",  getDynamicMatrixElement(matrix, 4, 3));
+    printf("matrix, 4, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 4, 4));
+
+    printf("matrix, 5, 0), 0.0: %f\n",   getDynamicMatrixElement(matrix, 5, 0));
+    printf("matrix, 5, 1), 2.52: %f\n",  getDynamicMatrixElement(matrix, 5, 1));
+    printf("matrix, 5, 2), 2.52: %f\n",  getDynamicMatrixElement(matrix, 5, 2));
+    printf("matrix, 5, 3), 0.0: %f\n",   getDynamicMatrixElement(matrix, 5, 3));
+    printf("matrix, 5, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 5, 4));
+
+    printf("matrix, 6, 0), 0.0: %f\n",   getDynamicMatrixElement(matrix, 6, 0));
+    printf("matrix, 6, 1), 3.12: %f\n",  getDynamicMatrixElement(matrix, 6, 1));
+    printf("matrix, 6, 2), 3.12: %f\n",  getDynamicMatrixElement(matrix, 6, 2));
+    printf("matrix, 6, 3), 0.0: %f\n",   getDynamicMatrixElement(matrix, 6, 3));
+    printf("matrix, 6, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 6, 4));
+
+    printf("matrix, 7, 0), 0.0: %f\n",   getDynamicMatrixElement(matrix, 7, 0));
+    printf("matrix, 7, 1), 7.57: %f\n",  getDynamicMatrixElement(matrix, 7, 1));
+    printf("matrix, 7, 2), 7.57: %f\n",  getDynamicMatrixElement(matrix, 7, 2));
+    printf("matrix, 7, 3), 0.0: %f\n",   getDynamicMatrixElement(matrix, 7, 3));
+    printf("matrix, 7, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 7, 4));
+
+    printf("matrix, 8, 0), 0.0: %f\n",   getDynamicMatrixElement(matrix, 8, 0));
+    printf("matrix, 8, 1), 0.01: %f\n",  getDynamicMatrixElement(matrix, 8, 1));
+    printf("matrix, 8, 2), 0.01: %f\n",  getDynamicMatrixElement(matrix, 8, 2));
+    printf("matrix, 8, 3), 0.0: %f\n",   getDynamicMatrixElement(matrix, 8, 3));
+    printf("matrix, 8, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 8, 4));
+
+    printf("matrix, 9, 0), 2.78: %f\n",  getDynamicMatrixElement(matrix, 9, 0));
+    printf("matrix, 9, 1), 49.98: %f\n", getDynamicMatrixElement(matrix, 9, 1));
+    printf("matrix, 9, 2), 2.30: %f\n",  getDynamicMatrixElement(matrix, 9, 2));
+    printf("matrix, 9, 3), 0.0: %f\n",   getDynamicMatrixElement(matrix, 9, 3));
+    printf("matrix, 9, 4), -999: %f\n",  getDynamicMatrixElement(matrix, 9, 4));
+
+    freeDynamicArr(arr3);
+    freeDynamicArr(arr6);
+    freeDynamicArr(arr7);
+    freeDynamicArr(arr8);
+
+    DynamicMatrix *matrixCopy = createDynamicMatrix();
+    copyDynamicMatrix(matrixCopy, matrix);
+
+    ck_assert_int_eq(matrix->rows, matrixCopy->rows);
+    ck_assert_int_eq(matrix->columns, matrixCopy->columns);
+    ck_assert_int_eq(matrix->rowCapacity, matrixCopy->rowCapacity);
+    ck_assert_int_eq(matrix->columnCapacity, matrixCopy->columnCapacity);
+
+    freeDynamicMatrix(matrix);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 0), 4.76);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 1), 1.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 2), 1.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 3), 2.51);
+    // this should not be here, right? It should only have 4 columns??
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 0), 1.25);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 1), 2.02);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 2), 2.02);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 3), 0.009);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 0), 9.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 1), 3.03);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 2), 3.03);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 3), 1093.1);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 1), 4.04);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 2), 4.04);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 3), 4.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 1), 5.05);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 2), 5.05);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 3), 0.63);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 1), 2.52);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 2), 2.52);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 1), 3.12);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 2), 3.12);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 1), 7.57);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 2), 7.57);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 1), 0.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 2), 0.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 4), 0.0);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 0), 2.78);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 1), 49.98);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 2), 2.30);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 4), 0.0);
+
+    printDynamicMatrix(matrixCopy);
+
+    pushRowElement(matrixCopy, 4, 0.360);
+    pushColumnElement(matrixCopy, 1, 0.894);
+
+    ck_assert_int_eq(matrixCopy->rows, 11);
+    ck_assert_int_eq(matrixCopy->columns, 5);
+
+    printDynamicMatrix(matrixCopy);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 5), 0.36);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 5), 0.0);
+
+    return 0;
     //===============//
 
     DynamicMatrix *matrix = createDynamicMatrix();

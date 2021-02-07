@@ -176,7 +176,7 @@ int getDynamicArrSize(const DynamicArray *array)
 double getDynamicArrElement(const DynamicArray *array, int index)
 {
     //return (index <= array->capacity) ? array->data[index] : 0.0;
-    return (index <= array->capacity) ? array->data[index] : -999;
+    return (index < array->capacity) ? array->data[index] : -999;
 }
 
 double backDynamicArr(const DynamicArray *array)
