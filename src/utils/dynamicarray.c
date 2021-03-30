@@ -123,7 +123,6 @@ bool insertDynamicArr(DynamicArray *array, int position, double element)
 
 bool eraseDynamicArr(DynamicArray *array, int position)
 {
-
     if (position < array->size && position >= 0)
     {
         if (!eraseAndMoveDynamicArr(array, position))

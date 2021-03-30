@@ -21,9 +21,9 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *row);
 bool pushRowElement(DynamicMatrix *matrix, int row, double element);
 bool pushColumnElement(DynamicMatrix *matrix, int column, double element);
 
-bool insertDynamicMatrixRow();
+bool insertDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, DynamicArray *row);
 bool insertDynamicMatrixColumn();
-bool eraseDynamicMatrixRow();
+bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition);
 bool eraseDynamicMatrixColumn();
 
 bool setDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, const DynamicArray *row);

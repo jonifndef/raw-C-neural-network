@@ -460,6 +460,7 @@ START_TEST(dynamicMatrixTest)
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 4), -999);
 
     insertDynamicMatrixRow(matrixCopy, 5, arr3);
+    ck_assert_int_eq(matrixCopy->columns, 5);
 
     // Resulting matrix should look as follows:
     //  4.76   1.01   1.01   2.51   0.0
@@ -567,7 +568,186 @@ START_TEST(dynamicMatrixTest)
     ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 5), -999);
 
 
-    //insertDynamicMatrixRow(matrixCopy, 0, arr1);
+    insertDynamicMatrixRow(matrixCopy, 0, arr1);
+    ck_assert_int_eq(matrixCopy->columns, 6);
+
+    // Resulting matrix should look as follows:
+    //  2.14   5.1    0.02   0.79   99.99  59238.39
+    //  4.76   1.01   1.01   2.51   0.0    0.0
+    //  1.25   2.02   2.02   0.009  0.0    0.0
+    //  9.01   3.03   3.03   1093.1 0.0    0.0
+    //  0.0    4.04   4.04   4.0    0.0    0.0
+    //  0.0    5.05   5.05   0.63   0.360  0.0
+    //  2.78   49.98  2.30   0.0    0.0    0.0
+    //  0.0    2.52   2.52   0.0    0.0    0.0
+    //  0.0    3.12   3.12   0.0    0.0    0.0
+    //  0.0    7.57   7.57   0.0    0.0    0.0
+    //  0.0    0.01   0.01   0.0    0.0    0.0
+    //  2.78   49.98  2.30   0.0    0.0    0.0
+    //  0.0    0.894  0.0    0.0    0.0    0.0
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 0), 2.14);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 1), 5.1);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 2), 0.02);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 3), 0.79);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 4), 99.99);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 5), 59238.39);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 0, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 0), 4.76);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 1), 1.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 2), 1.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 3), 2.51);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 1, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 0), 1.25);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 1), 2.02);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 2), 2.02);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 3), 0.009);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 2, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 0), 9.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 1), 3.03);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 2), 3.03);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 3), 1093.1);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 3, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 1), 4.04);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 2), 4.04);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 3), 4.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 4, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 1), 5.05);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 2), 5.05);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 3), 0.63);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 4), 0.360);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 5, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 0), 2.78);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 1), 49.98);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 2), 2.30);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 6, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 1), 2.52);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 2), 2.52);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 7, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 1), 3.12);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 2), 3.12);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 8, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 1), 7.57);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 2), 7.57);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 9, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 1), 0.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 2), 0.01);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 10, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 0), 2.78);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 1), 49.98);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 2), 2.30);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 11, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 1), 0.894);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 2), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 0), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 1), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 2), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 3), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 4), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 5), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 6), -999);
+
+
+    eraseDynamicArr(arr0, 0);
+    bool res_first = insertDynamicMatrixRow(matrixCopy, 12, arr0);
+    ck_assert_int_eq(res_first, true);
+
+    // Resulting matrix should look as follows:
+    //  2.14   5.1    0.02   0.79   99.99  59238.39
+    //  4.76   1.01   1.01   2.51   0.0    0.0
+    //  1.25   2.02   2.02   0.009  0.0    0.0
+    //  9.01   3.03   3.03   1093.1 0.0    0.0
+    //  0.0    4.04   4.04   4.0    0.0    0.0
+    //  0.0    5.05   5.05   0.63   0.360  0.0
+    //  2.78   49.98  2.30   0.0    0.0    0.0
+    //  0.0    2.52   2.52   0.0    0.0    0.0
+    //  0.0    3.12   3.12   0.0    0.0    0.0
+    //  0.0    7.57   7.57   0.0    0.0    0.0
+    //  0.0    0.01   0.01   0.0    0.0    0.0
+    //  2.78   49.98  2.30   0.0    0.0    0.0
+    //  1.2    66.359 7.0    0.0    1.445  0.0
+    //  0.0    0.894  0.0    0.0    0.0    0.0
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 0), 1.2);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 1), 66.359);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 2), 7.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 4), 1.445);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 1), 0.894);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 2), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 0), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 1), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 2), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 3), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 4), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 5), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 6), -999);
+
+
+    ck_assert_int_eq(matrixCopy->rows, 14);
+
+    bool res_second = insertDynamicMatrixRow(matrixCopy, 14, arr0);
+    ck_assert_int_eq(res_second, false);
 
     //// Resulting matrix should look as follows:
     ////  2.14   5.1    0.02   0.79   99.99  59238.39
@@ -582,46 +762,33 @@ START_TEST(dynamicMatrixTest)
     ////  0.0    7.57   7.57   0.0    0.0    0.0
     ////  0.0    0.01   0.01   0.0    0.0    0.0
     ////  2.78   49.98  2.30   0.0    0.0    0.0
-    ////  0.0    0.894  0.0    0.0    0.0    0.0
-
-    //eraseDynamicArr(arr1, 0);
-    //bool res_first = insertDynamicMatrixRow(matrixCopy, 12, arr0);
-    //ck_assert_int_eq(res_first, true);
-
-    //// Resulting matrix should look as follows:
-    ////  2.14   5.1    0.02   0.79   99.99  59238.39
-    ////  4.76   1.01   1.01   2.51   0.0    0.0
-    ////  1.25   2.02   2.02   0.009  0.0    0.0
-    ////  9.01   3.03   3.03   1093.1 0.0    0.0
-    ////  0.0    4.04   4.04   4.0    0.0    0.0
-    ////  0.0    5.05   5.05   0.63   0.360  0.0
-    ////  2.78   49.98  2.30   0.0    0.0    0.0
-    ////  0.0    2.52   2.52   0.0    0.0    0.0
-    ////  0.0    3.12   3.12   0.0    0.0    0.0
-    ////  0.0    7.57   7.57   0.0    0.0    0.0
-    ////  0.0    0.01   0.01   0.0    0.0    0.0
-    ////  2.78   49.98  2.30   0.0    0.0    0.0
-    ////  0.0    0.894  0.0    0.0    0.0    0.0
     ////  1.2    66.359 7.0    0.0    1.445  0.0
-
-    //bool res_second = insertDynamicMatrixRow(matrixCopy, 14, arr0);
-    //ck_assert_int_eq(res_second, false);
-
-    //// Resulting matrix should look as follows:
-    ////  2.14   5.1    0.02   0.79   99.99  59238.39
-    ////  4.76   1.01   1.01   2.51   0.0    0.0
-    ////  1.25   2.02   2.02   0.009  0.0    0.0
-    ////  9.01   3.03   3.03   1093.1 0.0    0.0
-    ////  0.0    4.04   4.04   4.0    0.0    0.0
-    ////  0.0    5.05   5.05   0.63   0.360  0.0
-    ////  2.78   49.98  2.30   0.0    0.0    0.0
-    ////  0.0    2.52   2.52   0.0    0.0    0.0
-    ////  0.0    3.12   3.12   0.0    0.0    0.0
-    ////  0.0    7.57   7.57   0.0    0.0    0.0
-    ////  0.0    0.01   0.01   0.0    0.0    0.0
-    ////  2.78   49.98  2.30   0.0    0.0    0.0
     ////  0.0    0.894  0.0    0.0    0.0    0.0
-    ////  1.2    66.359 7.0    0.0    1.445  0.0
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 0), 1.2);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 1), 66.359);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 2), 7.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 4), 1.445);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 12, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 0), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 1), 0.894);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 2), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 3), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 4), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 5), 0.0);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 13, 6), -999);
+
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 0), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 1), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 2), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 3), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 4), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 5), -999);
+    ck_assert_double_eq(getDynamicMatrixElement(matrixCopy, 14, 6), -999);
+
 
     //eraseDynamicMatrixRow(matrixCopy, 0);
 
