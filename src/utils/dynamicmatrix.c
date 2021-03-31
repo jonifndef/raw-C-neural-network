@@ -5,6 +5,13 @@
 #include <string.h>
 #include <stdio.h>
 
+typedef enum
+{
+    METHOD_PUSHBACK = 0,
+    METHOD_INSERT_INTO = 1
+}
+ColumnInsertionMethod;
+
 static void freeDynamicMatrixData(DynamicMatrix *matrix)
 {
     for (int i = 0; i < matrix->rowCapacity; i++)
@@ -106,7 +113,9 @@ static bool resizeNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
     return true;
 }
 
-static bool insertNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
+static bool insertNewColumn(DynamicMatrix *matrix,
+                            DynamicArray *newColumn,
+                            const ColumnInsertionMethod method)
 {
     // if empty matrix
     if (matrix->rows == 0)
@@ -120,6 +129,8 @@ static bool insertNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
 
     for (int i = 0; i < matrix->rows; i++)
     {
+        // TODO: check insertionmethod, but... we also need the potential column pos?
+        // kinda ugly, find better solution!
         if (!pushBackDynamicArr(getDynamicMatrixRowRef(matrix, i),
                                 getDynamicArrElement(newColumn, i)))
         {
@@ -185,6 +196,7 @@ static bool eraseAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
             return false;
         }
     }
+    freeDynamicMatrix(matrixCopy);
     matrix->rows--;
     return true;
 }
@@ -305,7 +317,7 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
         }
     }
 
-    if (!insertNewColumn(matrix, newColumn))
+    if (!insertNewColumn(matrix, newColumn, METHOD_PUSHBACK))
     {
         return false;
     }
@@ -435,6 +447,56 @@ bool insertDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, DynamicArray
     return false;
 }
 
+bool insertDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, DynamicArray *column)
+{
+    if (columnPosition < 0 ||
+        columnPosition >= matrix->columns)
+    {
+        return false;
+    }
+
+    DynamicArray *newColumn = createDynamicArr();
+    if (!newColumn)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < getDynamicArrSize(column); i++)
+    {
+        if (!pushBackDynamicArr(newColumn, getDynamicArrElement(column, i)))
+        {
+            free(newColumn);
+            return false;
+        }
+    }
+
+    if (getDynamicArrSize(newColumn) > matrix->rows)
+    {
+        if (!resizeExistingColumns(matrix, newColumn))
+        {
+            free(newColumn);
+            return false;
+        }
+    }
+    else if (getDynamicArrSize(newColumn) < matrix->rows)
+    {
+        if (!resizeNewColumn(matrix, newColumn))
+        {
+            free(newColumn);
+            return false;
+        }
+    }
+    
+    if (!insertNewColumn(matrix, newColumn, METHOD_INSERT_INTO))
+    {
+        free(newColumn);
+        return false;
+    }
+
+    free(newColumn);
+    return true;
+}
+
 bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
 {
     if (rowPosition < 0 ||
@@ -447,6 +509,8 @@ bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
     {
         return false;
     }
+
+    return true;
 }
 
 bool setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element)
