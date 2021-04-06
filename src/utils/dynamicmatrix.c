@@ -115,30 +115,51 @@ static bool resizeNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
 
 static bool insertNewColumn(DynamicMatrix *matrix,
                             DynamicArray *newColumn,
-                            const ColumnInsertionMethod method)
+                            int columnPosition)
 {
     // if empty matrix
     if (matrix->rows == 0)
     {
-        DynamicArray *arr = createDynamicArr();
-        for (int i = 0; i < getDynamicArrSize(newColumn); i++)
+        if (columnPosition == matrix->columns)
         {
-            pushRow(matrix, arr);
+            DynamicArray *arr = createDynamicArr();
+            for (int i = 0; i < getDynamicArrSize(newColumn); i++)
+            {
+                if (!pushRow(matrix, arr))
+                {
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            return false;
         }
     }
 
     for (int i = 0; i < matrix->rows; i++)
     {
-        // TODO: check insertionmethod, but... we also need the potential column pos?
-        // kinda ugly, find better solution!
-        if (!pushBackDynamicArr(getDynamicMatrixRowRef(matrix, i),
-                                getDynamicArrElement(newColumn, i)))
+        // pushBack
+        if (columnPosition == matrix->columns)
         {
-            return false;
+            if (!pushBackDynamicArr(getDynamicMatrixRowRef(matrix, i),
+                                    getDynamicArrElement(newColumn, i)))
+            {
+                return false;
+            }
+        }
+        // insert into
+        else
+        {
+            if (!insertDynamicArr(getDynamicMatrixRowRef(matrix, i),
+                                  columnPosition,
+                                  getDynamicArrElement(newColumn, i)))
+            {
+                return false;
+            }
         }
     }
     matrix->columns++;
-    // U G L Y
     matrix->columnCapacity = getDynamicMatrixRowRef(matrix, 0)->capacity;
     return true;
 }
@@ -317,7 +338,7 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
         }
     }
 
-    if (!insertNewColumn(matrix, newColumn, METHOD_PUSHBACK))
+    if (!insertNewColumn(matrix, newColumn, matrix->columns))
     {
         return false;
     }
@@ -487,7 +508,7 @@ bool insertDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, Dynami
         }
     }
     
-    if (!insertNewColumn(matrix, newColumn, METHOD_INSERT_INTO))
+    if (!insertNewColumn(matrix, newColumn, columnPosition))
     {
         free(newColumn);
         return false;
