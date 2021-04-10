@@ -534,6 +534,12 @@ bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
     return true;
 }
 
+bool eraseDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition)
+{
+    //TODO
+    return true;
+}
+
 bool setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element)
 {
     if ((row > matrix->rows || row < 0) || (column > matrix->columns || column < 0))
