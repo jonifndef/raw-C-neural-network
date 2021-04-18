@@ -9,6 +9,52 @@
 
 int main(int argc, char *argv[])
 {
+    DynamicMatrix *newMatrix = createDynamicMatrix();
+
+    //
+    // arr5:
+    // 0.01
+    // 31.14
+    // 0.09
+    // 99.12
+    //
+    // arr4:
+    // 2.14
+    // 5.1
+    // 0.02
+    // 0.79
+    // 99.99
+    // 59238.39
+    //
+    //
+    double row4[] = { 2.14, 5.1, 0.02, 0.79, 99.99, 59238.39 };
+    DynamicArray *arr4 = createDynamicArr();
+    setDynamicArrRow(arr4, row4, 6);
+
+    double row5[] = { 0.01, 31.14, 0.09, 99.12 };
+    DynamicArray *arr5 = createDynamicArr();
+    setDynamicArrRow(arr5, row5, 4);
+
+    printf("newMatrix->rows should be 0 = %d\n", newMatrix->rows);
+    printf("newMatrix->columns should be 0  = %d\n", newMatrix->columns);
+
+    bool res_fith = eraseDynamicMatrixRow(newMatrix, 0);
+    bool res_sixth = eraseDynamicMatrixColumn(newMatrix, 0);
+
+    printf("bool res_fith should be 0 = %d\n", res_fith);
+    printf("bool res_sixth should be 0  = %d\n", res_sixth);
+
+    printf("newMatrix->rows should be 0 = %d\n", newMatrix->rows);
+    printf("newMatrix->columns should be 0  = %d\n", newMatrix->columns);
+
+    bool res_seventh = insertDynamicMatrixRow(newMatrix, 0, arr5);
+    bool res_eighth = insertDynamicMatrixColumn(newMatrix, 0, arr4);
+
+    printf("bool res_seventh should be 1 = %d\n", res_seventh);
+    printf("bool res_eighth should be 1  = %d\n", res_eighth);
+
+    return 0;
+
     srand(time(0));
 
     int numNeuronsPrevLayer = 4;

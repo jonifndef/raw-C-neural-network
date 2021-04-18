@@ -123,15 +123,16 @@ bool insertDynamicArr(DynamicArray *array, int position, double element)
 
 bool eraseDynamicArr(DynamicArray *array, int position)
 {
-    if (position < array->size && position >= 0)
+    if (position < 0 || position >= array->size)
     {
-        if (!eraseAndMoveDynamicArr(array, position))
-        {
-            return false;
-        }
-        return true;
+        return false;
     }
-    return false;
+
+    if (!eraseAndMoveDynamicArr(array, position))
+    {
+        return false;
+    }
+    return true;
 }
 
 void popDynamicArr(DynamicArray *array)
@@ -196,6 +197,7 @@ bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
         return false;
     }
 
+    // bug here when copying empty matrix! when inserting row into empty matrix
     memcpy(newData, source->data, source->size * sizeof(double));
 
     destination->capacity = source->capacity;

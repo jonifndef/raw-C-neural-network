@@ -60,7 +60,7 @@ static bool resizeExistingRows(DynamicMatrix *matrix, DynamicArray *newRow)
             }
         }
     }
-    matrix->columns++;
+    matrix->columns = newRow->size;
     return true;
 }
 
@@ -113,7 +113,7 @@ static bool resizeNewColumn(DynamicMatrix *matrix, DynamicArray *newColumn)
     return true;
 }
 
-static bool insertNewColumn(DynamicMatrix *matrix,
+static bool insertAndMoveDynamicMatrixColumns(DynamicMatrix *matrix,
                             DynamicArray *newColumn,
                             int columnPosition)
 {
@@ -174,6 +174,8 @@ static bool insertAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
         return false;
     }
 
+    //if matrix is not empty
+    //{
     if (!copyDynamicMatrix(matrixCopy, matrix))
     {
         return false;
@@ -186,12 +188,14 @@ static bool insertAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
             return false;
         }
     }
+    //}
 
     if (!copyDynamicArr(getDynamicMatrixRowRef(matrix, rowPosition), row))
     {
         return false;
     }
     matrix->rows++;
+    freeDynamicMatrix(matrixCopy);
 
     return true;
 }
@@ -219,6 +223,18 @@ static bool eraseAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
     }
     freeDynamicMatrix(matrixCopy);
     matrix->rows--;
+    return true;
+}
+static bool eraseAndMoveDynamicMatrixColumns(DynamicMatrix *matrix, int columnPosition)
+{
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        if (!eraseDynamicArr(getDynamicMatrixRowRef(matrix, i), columnPosition))
+        {
+            return false;
+        }
+    }
+    matrix->columns--;
     return true;
 }
 
@@ -338,7 +354,7 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
         }
     }
 
-    if (!insertNewColumn(matrix, newColumn, matrix->columns))
+    if (!insertAndMoveDynamicMatrixColumns(matrix, newColumn, matrix->columns))
     {
         return false;
     }
@@ -412,6 +428,26 @@ bool pushColumnElement(DynamicMatrix *matrix, int columnPosition, double element
 
 bool insertDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, DynamicArray *row)
 {
+    if (rowPosition < 0 ||
+        rowPosition > matrix->rows)
+    {
+        return false;
+    }
+    else if (rowPosition == matrix->rows &&
+             matrix->rows != 0)
+    {
+        return false;
+    }
+    
+    if (matrix->rows == 0)
+    {
+        if (!pushRow(matrix, row))
+        {
+            return false;
+        }
+        return true;
+    }
+
     // Perform a deep copy of the new row, except its capacity
     DynamicArray *newRow = createDynamicArr();
     if (newRow == NULL)
@@ -445,35 +481,43 @@ bool insertDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, DynamicArray
         }
     }
 
-    if (rowPosition < matrix->rows && rowPosition >= 0)
+    if (matrix->rows >= matrix->rowCapacity)
     {
-        if (matrix->rows >= matrix->rowCapacity)
-        {
-            if (!reAllocDynamicMatrixRows(
-                    matrix, matrix->rowCapacity + (matrix->rowCapacity / 2)))
-            {
-                free(newRow);
-                return false;
-            }
-        }
-        if (!insertAndMoveDynamicMatrixRows(matrix, rowPosition, newRow))
+        if (!reAllocDynamicMatrixRows(
+                matrix, matrix->rowCapacity + (matrix->rowCapacity / 2)))
         {
             free(newRow);
             return false;
         }
+    }
+    if (!insertAndMoveDynamicMatrixRows(matrix, rowPosition, newRow))
+    {
         free(newRow);
-        return true;
+        return false;
     }
     free(newRow);
-    return false;
+    return true;
 }
 
 bool insertDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, DynamicArray *column)
 {
     if (columnPosition < 0 ||
-        columnPosition >= matrix->columns)
+        columnPosition > matrix->columns)
     {
         return false;
+    }
+    else if (columnPosition == matrix->columns &&
+             matrix->columns != 0)
+    {
+        return false;
+    }
+    if (matrix->columns == 0)
+    {
+        if (!pushColumn(matrix, column))
+        {
+            return false;
+        }
+        return true;
     }
 
     DynamicArray *newColumn = createDynamicArr();
@@ -507,8 +551,8 @@ bool insertDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, Dynami
             return false;
         }
     }
-    
-    if (!insertNewColumn(matrix, newColumn, columnPosition))
+
+    if (!insertAndMoveDynamicMatrixColumns(matrix, newColumn, columnPosition))
     {
         free(newColumn);
         return false;
@@ -525,7 +569,7 @@ bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
     {
         return false;
     }
-    
+
     if (!eraseAndMoveDynamicMatrixRows(matrix, rowPosition))
     {
         return false;
@@ -536,7 +580,17 @@ bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
 
 bool eraseDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition)
 {
-    //TODO
+    if (columnPosition < 0 ||
+        columnPosition >= matrix->columns)
+    {
+        return false;
+    }
+
+    if (!eraseAndMoveDynamicMatrixColumns(matrix, columnPosition))
+    {
+        return false;
+    }
+
     return true;
 }
 
