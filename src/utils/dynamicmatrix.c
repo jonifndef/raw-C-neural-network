@@ -203,28 +203,38 @@ static bool insertAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
 static bool eraseAndMoveDynamicMatrixRows(DynamicMatrix *matrix,
                                           int rowPosition)
 {
-    DynamicMatrix *matrixCopy = createDynamicMatrix();
-    if (!matrixCopy)
+    if (matrix->rows > 1)
     {
-        return false;
-    }
-
-    if (!copyDynamicMatrix(matrixCopy, matrix))
-    {
-        return false;
-    }
-
-    for (int i = rowPosition; i < matrix->rows - 1; i++)
-    {
-        if (!copyDynamicArr(matrix->data[i], matrixCopy->data[i + 1]))
+        DynamicMatrix *matrixCopy = createDynamicMatrix();
+        if (!matrixCopy)
         {
             return false;
         }
+
+        if (!copyDynamicMatrix(matrixCopy, matrix))
+        {
+            return false;
+        }
+
+        for (int i = rowPosition; i < matrix->rows - 1; i++)
+        {
+            if (!copyDynamicArr(matrix->data[i], matrixCopy->data[i + 1]))
+            {
+                return false;
+            }
+        }
+        freeDynamicMatrix(matrixCopy);
     }
-    freeDynamicMatrix(matrixCopy);
     matrix->rows--;
+
+    if (matrix->rows == 0)
+    {
+        matrix->columns = 0;
+    }
+
     return true;
 }
+
 static bool eraseAndMoveDynamicMatrixColumns(DynamicMatrix *matrix, int columnPosition)
 {
     for (int i = 0; i < matrix->rows; i++)
@@ -235,6 +245,12 @@ static bool eraseAndMoveDynamicMatrixColumns(DynamicMatrix *matrix, int columnPo
         }
     }
     matrix->columns--;
+
+    if (matrix->columns == 0)
+    {
+        matrix->rows = 0;
+    }
+
     return true;
 }
 
@@ -564,6 +580,7 @@ bool insertDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, Dynami
 
 bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
 {
+    //TODO: free memory after erasing
     if (rowPosition < 0 ||
         rowPosition >= matrix->rows)
     {
@@ -580,6 +597,7 @@ bool eraseDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition)
 
 bool eraseDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition)
 {
+    //TODO: free memory after erasing
     if (columnPosition < 0 ||
         columnPosition >= matrix->columns)
     {

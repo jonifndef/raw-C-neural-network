@@ -1498,19 +1498,19 @@ START_TEST(dynamicMatrixTest)
     ck_assert_int_eq(newMatrix->rows, 0);
     ck_assert_int_eq(newMatrix->columns, 0);
 
-    bool res_fith = eraseDynamicMatrixRow(newMatrix, 0);
-    bool res_sixth = eraseDynamicMatrixColumn(newMatrix, 0);
-    ck_assert_int_eq(res_fith, false);
-    ck_assert_int_eq(res_sixth, false);
+    bool res_6 = eraseDynamicMatrixRow(newMatrix, 0);
+    bool res_7 = eraseDynamicMatrixColumn(newMatrix, 0);
+    ck_assert_int_eq(res_6, false);
+    ck_assert_int_eq(res_7, false);
 
     ck_assert_int_eq(newMatrix->rows, 0);
     ck_assert_int_eq(newMatrix->columns, 0);
 
-    bool res_seventh = insertDynamicMatrixRow(newMatrix, 0, arr5);
-    bool res_eighth = insertDynamicMatrixColumn(newMatrix, 0, arr4);
+    bool res_8 = insertDynamicMatrixRow(newMatrix, 0, arr5);
+    bool res_9 = insertDynamicMatrixColumn(newMatrix, 0, arr4);
 
-    ck_assert_int_eq(res_seventh, true);
-    ck_assert_int_eq(res_eighth, true);
+    ck_assert_int_eq(res_8, true);
+    ck_assert_int_eq(res_9, true);
 
     // The resulting matrix should be:
     // 2.14     0.01  31.14  0.09   99.12  0.0  0.0
@@ -1519,6 +1519,9 @@ START_TEST(dynamicMatrixTest)
     // 0.79     0.0   0.0    0.0    0.0    0.0  0.0
     // 99.99    0.0   0.0    0.0    0.0    0.0  0.0
     // 59238.39 0.0   0.0    0.0    0.0    0.0  0.0
+
+    ck_assert_int_eq(newMatrix->rows, 6);
+    ck_assert_int_eq(newMatrix->columns, 7);
 
     ck_assert_double_eq(getDynamicMatrixElement(newMatrix, 0, 0), 2.14);
     ck_assert_double_eq(getDynamicMatrixElement(newMatrix, 0, 1), 0.01);
@@ -1583,7 +1586,54 @@ START_TEST(dynamicMatrixTest)
     ck_assert_double_eq(getDynamicMatrixElement(newMatrix, 6, 6), -999);
     ck_assert_double_eq(getDynamicMatrixElement(newMatrix, 6, 7), -999);
 
-    //eraseDynamicMatrixColumn(
+    DynamicMatrix *newMatrixCopy = createDynamicMatrix();
+    bool res_10 = copyDynamicMatrix(newMatrixCopy, newMatrix);
+    ck_assert_int_eq(res_10, true);
+
+    bool res_11 = eraseDynamicMatrixColumn(newMatrix, 7);
+    ck_assert_int_eq(res_11, false);
+
+    bool res_12 = eraseDynamicMatrixColumn(newMatrix, 6);
+    ck_assert_int_eq(res_12, true);
+
+    ck_assert_int_eq(newMatrix->rows, 6);
+    ck_assert_int_eq(newMatrix->columns, 6);
+
+    for (int i = 0; i < 6; i++)
+    {
+        bool res_13 = eraseDynamicMatrixColumn(newMatrix, 0);
+        ck_assert_int_eq(res_13, true);
+    }
+    ck_assert_int_eq(newMatrix->columns, 0);
+    ck_assert_int_eq(newMatrix->rows, 0);
+
+    bool res_14 = eraseDynamicMatrixColumn(newMatrix, 0);
+    ck_assert_int_eq(res_14, false);
+
+    // newMatrixCopy
+    ck_assert_int_eq(newMatrixCopy->rows, 6);
+    ck_assert_int_eq(newMatrixCopy->columns, 7);
+
+    bool res_15 = eraseDynamicMatrixRow(newMatrixCopy, 0);
+    ck_assert_int_eq(res_15, true);
+
+    ck_assert_int_eq(newMatrixCopy->rows, 5);
+    ck_assert_int_eq(newMatrixCopy->columns, 7);
+
+    for (int i = 0; i < 5; i++)
+    {
+        bool res_16 = eraseDynamicMatrixRow(newMatrixCopy, 0);
+        ck_assert_int_eq(res_16, true);
+    }
+
+    ck_assert_int_eq(newMatrixCopy->columns, 0);
+    ck_assert_int_eq(newMatrixCopy->rows, 0);
+
+    bool res_17 = eraseDynamicMatrixRow(newMatrix, 0);
+    ck_assert_int_eq(res_17, false);
+
+    // Just add a last test where we do insert on an empty matrix
+    // with column first, row second
 
     freeDynamicArr(arr4);
     freeDynamicArr(arr6);
