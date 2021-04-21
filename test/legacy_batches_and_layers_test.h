@@ -1,13 +1,15 @@
+#ifndef LEGACY_BATCHES_AND_LAYERS_TEST_H
+#define LEGACY_BATCHES_AND_LAYERS_TEST_H
+
+#include <check.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 #include "../src/layer.h"
 #include "../src/activationfunctions.h"
-#include "../src/utils/dynamicarray.h"
-#include "../src/utils/dynamicmatrix.h"
 
-int main(int argc, char *argv[])
+START_TEST(legacy_batches_and_layers_test)
 {
     srand(time(0));
 
@@ -60,47 +62,50 @@ int main(int argc, char *argv[])
     forwardDense(layer1, inputs);
     outputs1 = getOutputsFromLayerDense(layer1);
 
-    printf("=== Output form layer 1: ===\n");
-    for (int i = 0; i < batchSize; i++)
-    {
-        for (int j = 0; j < numNeuronsLayer; j++)
-        {
-            double element = getMatrixDoublesElement(outputs1, i, j);
-            printf("%.4f ", element);
-        }
-        printf("\n");
-    }
+    // Correct answers for layer 1:
+    //      4.8,     1.21,     2.385
+    //      8.9,    -1.81,     0.2
+    //      1.41,    1.051,    0.026
 
-    printf("\n");
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 0, 0), 4.8);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 0, 1), 1.21);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 0, 2), 2.385);
+    
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 1, 0), 8.9);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 1, 1), -1.81);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 1, 2), 0.2);
+
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 2, 0), 1.41);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 2, 1), 1.051);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs1, 2, 2), 0.026);
 
     forwardDense(layer2, outputs1);
     outputs2 = getOutputsFromLayerDense(layer2);
 
-    printf("=== Output form layer 2: ===\n");
-    for (int i = 0; i < batchSize; i++)
-    {
-        for (int j = 0; j < numNeuronsLayer; j++)
-        {
-            double element = getMatrixDoublesElement(outputs2, i, j);
-            printf("%.4f ", element);
-        }
-        printf("\n");
-    }
+    // Correct answers for layer 2:
+    //      0.5031, -1.04185, -2.03875
+    //      0.2434, -2.7332,  -5.7633
+    //     -0.99314, 1.41254, -0.35655
+
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 0, 0), 0.5031);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 0, 1), -1.04185);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 0, 2), -2.03875);
+    
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 1, 0), 0.2434);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 1, 1), -2.7332);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 1, 2), -5.7633);
+
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 2, 0), -0.99314);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 2, 1), 1.41254);
+    ck_assert_float_eq(getMatrixDoublesElement(outputs2, 2, 2), -0.35655);
+
     freeMatrixDoublesContents(outputs1);
     freeMatrixDoublesContents(outputs2);
 
     freeLayerDenseContents(layer1);
     freeLayerDenseContents(layer2);
 
-    return 0;
 }
+END_TEST
 
-// Correct answers for layer 1:
-//      4.8,     1.21,     2.385
-//      8.9,    -1.81,     0.2
-//      1.41,    1.051,    0.026
-
-// Correct answers for layer 2:
-//      0.5031, -1.04185, -2.03875
-//      0.2434, -2.7332,  -5.7633
-//     -0.99314, 1.41254, -0.35655
+#endif // LEGACY_BATCHES_AND_LAYERS_TEST_H

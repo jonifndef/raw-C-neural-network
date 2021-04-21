@@ -19,7 +19,7 @@ LIBRAWCNEURALNETWORK_FILES := \
 	$(UTILS_DIR)/fileIO.c \
 	$(UTILS_DIR)/matrix.c \
 
-all: raw-c-neural-network utilsTest
+all: raw-c-neural-network utilsTest legacyTest
 
 raw-c-neural-network: libRawCNeuralNetwork.a
 	gcc $(CFLAGS) -o $(BUILD_DIR)/raw-c-neural-network $(SRC_DIR)/main.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a
@@ -36,7 +36,10 @@ libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_FILES:.c=.o)
 #	gcc $(CFLAGS) -o $(BUILD_DIR)/test-a $(TEST_DIR)/main_test_non_dynamic_arrays.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a
 
 utilsTest: libNeuralNetworkUtils.a
-	gcc $(CFLAGS) -o $(BUILD_DIR)/utilsTest $(TEST_DIR)/runTests.c -L. $(BUILD_DIR)/libNeuralNetworkUtils.a -lcheck
+	gcc $(CFLAGS) -o $(BUILD_DIR)/utilsTest $(TEST_DIR)/runUtilsTests.c -L. $(BUILD_DIR)/libNeuralNetworkUtils.a -lcheck
+
+legacyTest: libNeuralNetworkUtils.a libRawCNeuralNetwork.a
+	gcc $(CFLAGS) -o $(BUILD_DIR)/legacyTest $(TEST_DIR)/runLegacyTest.c -L. $(BUILD_DIR)/libNeuralNetworkUtils.a $(BUILD_DIR)/libRawCNeuralNetwork.a -lcheck
 
 clean:
 	rm -f $(BUILD_DIR)/* $(shell find * -name "*.o")
