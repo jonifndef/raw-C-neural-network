@@ -60,19 +60,40 @@ bool reAllocDynamicArr(DynamicArray *array, int newCapacity)
     return true;
 }
 
-DynamicArray* createDynamicArr()
+static DynamicArray* allocateDynamicArr(uint capacity)
 {
     DynamicArray *array = calloc(1, sizeof(DynamicArray));
-    if (array == NULL)
+    if (!array)
     {
         return NULL;
     }
 
-    // default capacity 4, seems reasonable, right?
-    array->capacity = 4;
+    array->capacity = capacity;
     array->size = 0;
     array->data = calloc(array->capacity, sizeof(double));
-    if (array->data == NULL)
+    if (!array->data)
+    {
+        return NULL;
+    }
+
+    return array;
+}
+
+DynamicArray* createDynamicArr()
+{
+    // default capacity 4, seems reasonable, right?
+    return allocateDynamicArr(4);
+}
+
+DynamicArray* createPopulatedDynamicArr(double *inputArray, uint size)
+{
+    DynamicArray *array = allocateDynamicArr(size);
+    if (!array)
+    {
+        return NULL;
+    }
+
+    if (!setDynamicArr(array, inputArray, size))
     {
         return NULL;
     }
@@ -151,10 +172,12 @@ bool setDynamicArrElement(DynamicArray *array, int index, double value)
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
-bool setDynamicArrRow(DynamicArray *array, const double *row, int size)
+bool setDynamicArr(DynamicArray *array, const double *inputArray, int size)
 {
     if (size > array->capacity)
     {
@@ -163,7 +186,7 @@ bool setDynamicArrRow(DynamicArray *array, const double *row, int size)
             return false;
         }
     }
-    memcpy(array->data, row, size * sizeof(double));
+    memcpy(array->data, inputArray, size * sizeof(double));
     array->size = size;
     return true;
 }

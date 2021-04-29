@@ -13,6 +13,7 @@ typedef struct DynamicArray
 bool reAllocDynamicArr(DynamicArray *arr, int newCapacity);
 
 DynamicArray* createDynamicArr();
+DynamicArray* createPopulatedDynamicArr(double *arr, uint size);
 void freeDynamicArr(DynamicArray *array);
 
 bool pushBackDynamicArr(DynamicArray *array, double element);
@@ -21,7 +22,7 @@ bool eraseDynamicArr(DynamicArray *array, int position);
 void popDynamicArr(DynamicArray *array);
 
 bool setDynamicArrElement(DynamicArray *array, int index, double value);
-bool setDynamicArrRow(DynamicArray *array, const double *row, int size);
+bool setDynamicArr(DynamicArray *array, const double *inputArr, int size);
 
 int getDynamicArrSize(const DynamicArray *array);
 double getDynamicArrElement(const DynamicArray *array, int index);
