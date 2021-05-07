@@ -1,4 +1,4 @@
-#include "neuron.h"
+#include "legacy_neuron.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,21 +30,21 @@ void freeNeuronContents(Neuron *neuron)
     free(neuron->weights);
 }
 
-void updateWeightsAndBiasNeuron(Neuron *neuron, DynamicArray *weights, double bias)
+void updateWeightsAndBiasNeuron(Neuron *neuron, double *weights, double bias)
 {
     for (int i = 0; i < neuron->numInputs; i++)
     {
-        neuron->weights[i] = getDynamicArrElement(weights, i);
+        neuron->weights[i] = weights[i];
     }
     neuron->bias = bias;
 }
 
-double getNeuronOutput(const Neuron *neuron, DynamicArray *inputs)
+double getNeuronOutput(const Neuron *neuron, double *inputs)
 {
     double output = 0.0;
     for (int i = 0; i < neuron->numInputs; i++)
     {
-        output += getDynamicArrElement(inputs, i) * neuron->weights[i];
+        output += inputs[i] * neuron->weights[i];
     }
     output += neuron->bias;
     return output;

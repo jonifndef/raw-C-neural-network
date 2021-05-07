@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h> // debug
 
-#include "layer.h"
+#include "legacy_layer.h"
 
 LayerDense *createLayerDense(int numNeurons,
                              int batchSize,
@@ -11,8 +11,7 @@ LayerDense *createLayerDense(int numNeurons,
     LayerDense *layer= calloc(1, sizeof(LayerDense));
     layer->numNeurons = numNeurons;
     layer->neurons = calloc(numNeurons, sizeof(Neuron));
-    //layer->outputs = createMatrixDoubles(batchSize, numNeurons);
-    layer->outputs = createDynamicMatrix();
+    layer->outputs = createMatrixDoubles(batchSize, numNeurons);
 
     for (int i = 0; i < numNeurons; i++)
     {
@@ -25,20 +24,20 @@ LayerDense *createLayerDense(int numNeurons,
 void freeLayerDenseContents(LayerDense *layer)
 {
     free(layer->neurons);
-    freeDynamicMatrix(layer->outputs);
+    free(layer->outputs);
 }
 
 void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
-                                        const DynamicMatrix *weights,
+                                        const MatrixDoubles *weights,
                                         const double *biases)
 {
     for (int i = 0; i < layer->numNeurons; i++)
     {
-        updateWeightsAndBiasNeuron(&layer->neurons[i], getDynamicMatrixRowRef(weights, i), biases[i]);
+        updateWeightsAndBiasNeuron(&layer->neurons[i], getMatrixDoublesRow(weights, i), biases[i]);
     }
 }
 
-void forwardDense(LayerDense* layer, const DynamicMatrix *inputs)
+void forwardDense(LayerDense* layer, const MatrixDoubles *inputs)
 {
     // The rows in this instance represent the batches
     // We want to calculate the the output of each neuron for each of the batches
@@ -46,13 +45,12 @@ void forwardDense(LayerDense* layer, const DynamicMatrix *inputs)
     {
         for (int j = 0; j < layer->numNeurons; j++)
         {
-            setDynamicMatrixElement(layer->outputs, i, j, getNeuronOutput(&layer->neurons[j], getDynamicMatrixRowRef(inputs, i)));
+            layer->outputs->data[i][j] = getNeuronOutput(&layer->neurons[j], getMatrixDoublesRow(inputs, i));
         }
     }
 }
 
-DynamicMatrix* getOutputsFromLayerDense(const LayerDense* layer)
+MatrixDoubles* getOutputsFromLayerDense(const LayerDense* layer)
 {
     return layer->outputs;
 }
-

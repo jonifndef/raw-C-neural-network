@@ -13,10 +13,16 @@ typedef struct DynamicMatrix
     DynamicArray **data;
 } DynamicMatrix;
 
+typedef enum TakeOwnerShip
+{
+    DO_NOT_TAKE_OWNERSHIP = 0,
+    DO_TAKE_OWNERSHIP = 1
+} TakeOwnerShip;
+
 DynamicMatrix* createDynamicMatrix();
 void freeDynamicMatrix(DynamicMatrix *matrix);
 
-bool pushRow(DynamicMatrix *matrix, DynamicArray *row);
+bool pushRow(DynamicMatrix *matrix, DynamicArray *row, const TakeOwnerShip option);
 bool pushColumn(DynamicMatrix *matrix, DynamicArray *row);
 bool pushRowElement(DynamicMatrix *matrix, int row, double element);
 bool pushColumnElement(DynamicMatrix *matrix, int column, double element);

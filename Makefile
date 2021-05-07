@@ -2,7 +2,7 @@ CFLAGS := -g -Wall -Wpedantic #-O2
 SRC_DIR := src
 UTILS_DIR := $(SRC_DIR)/utils
 BUILD_DIR := build
-TEST_DIR := test
+TEST_DIR := tests
 
 LIBNNUTILS_FILES := \
 	$(UTILS_DIR)/dynamicarray.c \
@@ -12,14 +12,14 @@ LIBNNUTILS_FILES := \
 
 LIBRAWCNEURALNETWORK_FILES := \
 	$(SRC_DIR)/activationfunctions.c \
-	$(SRC_DIR)/layer.c \
-	$(SRC_DIR)/neuron.c \
+	$(SRC_DIR)/legacy_layer.c \
+	$(SRC_DIR)/legacy_neuron.c \
 	$(UTILS_DIR)/dynamicarray.c \
 	$(UTILS_DIR)/dynamicmatrix.c \
 	$(UTILS_DIR)/fileIO.c \
 	$(UTILS_DIR)/matrix.c \
 
-all: raw-c-neural-network utilsTest legacyTest
+all: raw-c-neural-network utilsTest legacyTest neuralNetworkTest
 
 raw-c-neural-network: libRawCNeuralNetwork.a
 	gcc $(CFLAGS) -o $(BUILD_DIR)/raw-c-neural-network $(SRC_DIR)/main.c -L. $(BUILD_DIR)/libRawCNeuralNetwork.a
@@ -40,6 +40,9 @@ utilsTest: libNeuralNetworkUtils.a
 
 legacyTest: libNeuralNetworkUtils.a libRawCNeuralNetwork.a
 	gcc $(CFLAGS) -o $(BUILD_DIR)/legacyTest $(TEST_DIR)/runLegacyTest.c -L. $(BUILD_DIR)/libNeuralNetworkUtils.a $(BUILD_DIR)/libRawCNeuralNetwork.a -lcheck
+
+neuralNetworkTest: libNeuralNetworkUtils.a libRawCNeuralNetwork.a
+	gcc $(CFLAGS) -o $(BUILD_DIR)/neuralNetworkTest $(TEST_DIR)/runNeuralNetworkTest.c -L. $(BUILD_DIR)/libNeuralNetworkUtils.a $(BUILD_DIR)/libRawCNeuralNetwork.a -lcheck
 
 clean:
 	rm -f $(BUILD_DIR)/* $(shell find * -name "*.o")

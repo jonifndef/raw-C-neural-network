@@ -91,7 +91,7 @@ static bool resizeExistingColumns(DynamicMatrix *matrix, DynamicArray *newColumn
     int numRowsToAdd = getDynamicArrSize(newColumn) - matrix->rows;
     for (int i = 0; i < numRowsToAdd; i++)
     {
-        if (!pushRow(matrix, paddingArr))
+        if (!pushRow(matrix, paddingArr, DO_NOT_TAKE_OWNERSHIP))
         {
             return false;
         }
@@ -125,7 +125,7 @@ static bool insertAndMoveDynamicMatrixColumns(DynamicMatrix *matrix,
             DynamicArray *arr = createDynamicArr();
             for (int i = 0; i < getDynamicArrSize(newColumn); i++)
             {
-                if (!pushRow(matrix, arr))
+                if (!pushRow(matrix, arr, DO_NOT_TAKE_OWNERSHIP))
                 {
                     return false;
                 }
@@ -294,7 +294,9 @@ void freeDynamicMatrix(DynamicMatrix *matrix)
     free(matrix);
 }
 
-bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
+bool pushRow(DynamicMatrix *matrix,
+             DynamicArray *row,
+             const TakeOwnerShip ownershipOption)
 {
     // Perform a deep copy of the new row, except its capacity
     DynamicArray *newRow = createDynamicArr();
@@ -340,12 +342,17 @@ bool pushRow(DynamicMatrix *matrix, DynamicArray *row)
     matrix->columnCapacity = newRow->capacity;
 
     free(newRow);
+    if (ownershipOption == DO_TAKE_OWNERSHIP)
+    {
+        free(row);
+    }
+
     return true;
 }
 
 bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
 {
-    // Perform a deep copy of the new column, except its capacity
+    //Perform a deep copy of the new column, except its capacity
     DynamicArray *newColumn = createDynamicArr();
     for (int i = 0; i < getDynamicArrSize(column); i++)
     {
@@ -433,7 +440,7 @@ bool pushColumnElement(DynamicMatrix *matrix, int columnPosition, double element
                 }
             }
         }
-        if (!pushRow(matrix, arr))
+        if (!pushRow(matrix, arr, DO_NOT_TAKE_OWNERSHIP))
         {
             return false;
         }
@@ -454,10 +461,10 @@ bool insertDynamicMatrixRow(DynamicMatrix *matrix, int rowPosition, DynamicArray
     {
         return false;
     }
-    
+
     if (matrix->rows == 0)
     {
-        if (!pushRow(matrix, row))
+        if (!pushRow(matrix, row, DO_NOT_TAKE_OWNERSHIP))
         {
             return false;
         }

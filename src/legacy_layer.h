@@ -1,15 +1,15 @@
-#ifndef LAYER_H_
-#define LAYER_H_
+#ifndef LEGACY_LAYER_H_
+#define LEGACY_LAYER_H_
 
-#include "neuron.h"
+#include "legacy_neuron.h"
 #include "utils/fileIO.h"
-#include "utils/dynamicmatrix.h"
+#include "utils/matrix.h"
 
 typedef struct LayerDense
 {
     int numNeurons;
     Neuron *neurons;
-    DynamicMatrix *outputs;
+    MatrixDoubles *outputs;
     void *activationFunction; //will be a function pointer once we implement them
 } LayerDense;
 
@@ -19,9 +19,9 @@ LayerDense* createLayerDense(int numNeurons,
                              double (*activationFunction)(double));
 void freeLayerDenseContents(LayerDense *layer);
 void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
-                                        const DynamicMatrix *weights,
+                                        const MatrixDoubles *weights,
                                         const double *biases);
-void forwardDense(LayerDense *layer, const DynamicMatrix *inputs);
-DynamicMatrix* getOutputsFromLayerDense(const LayerDense *layer);
+void forwardDense(LayerDense *layer, const MatrixDoubles *inputs);
+MatrixDoubles* getOutputsFromLayerDense(const LayerDense *layer);
 
-#endif // LAYER_H_
+#endif // LEGACY_LAYER_H_

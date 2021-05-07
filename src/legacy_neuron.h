@@ -1,7 +1,5 @@
-#ifndef NEURON_H_
-#define NEURON_H_
-
-#include "utils/dynamicarray.h"
+#ifndef LEGACY_NEURON_H_
+#define LEGACY_NEURON_H_
 
 typedef struct Neuron
 {
@@ -14,7 +12,7 @@ typedef struct Neuron
 
 Neuron* createNeuron(int numNeuronsPrevLayer, double(*activationFunction)(double));
 void freeNeuronContents(Neuron *neuron);
-void updateWeightsAndBiasNeuron(Neuron *neuron, DynamicArray *weights, const double bias);
-double getNeuronOutput(const Neuron *neuron, DynamicArray *inputs);
+void updateWeightsAndBiasNeuron(Neuron *neuron, double *weights, double bias);
+double getNeuronOutput(const Neuron *neuron, double *inputs);
 
-#endif //NEURON_H_
+#endif // LEGACY_NEURON_H_
