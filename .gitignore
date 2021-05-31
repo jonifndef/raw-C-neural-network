@@ -1,4 +1,8 @@
 *.txt
 *.o
+!Makefile
+!Makefile_old
+!*/
 build
 cscope.out
+.cache
