@@ -33,7 +33,7 @@ LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 vpath %.c $(SRC_DIR):$(UTILS_DIR)
 
 
-all: libRawCNeuralNetwork.a raw-c-neural-network
+all: raw-c-neural-network
 
 $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
@@ -42,15 +42,17 @@ libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
-libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) libNeuralNetworkUtils.a
+#libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) libNeuralNetworkUtils.a
+libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
 	$(CC) -c -o $@ $^
 
-raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a
+raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a libNeuralNetworkUtils.a
 	$(CC) $(CFLAGS) -o $@ $^
+	#$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	@find * ! -name "Makefile" ! -name "obj" ! -name "Makefile_old" -delete
