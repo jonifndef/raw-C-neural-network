@@ -47,6 +47,6 @@ double getNeuronOutput(const Neuron *neuron, DynamicArray *inputs)
         output += getDynamicArrElement(inputs, i) * neuron->weights[i];
     }
     output += neuron->bias;
-    return output;
-    //return neuron->activationFunction(output);
+
+    return neuron->activationFunction(output);
 }

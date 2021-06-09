@@ -736,7 +736,7 @@ void printDynamicMatrix(DynamicMatrix *matrix)
     {
         for (int j = 0; j < matrix->columns; j++)
         {
-            printf("%.3f ", matrix->data[i]->data[j]);
+            printf("%.4f ", matrix->data[i]->data[j]);
         }
         printf("\n");
     }

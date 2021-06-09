@@ -32,7 +32,6 @@ LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 
 vpath %.c $(SRC_DIR):$(UTILS_DIR)
 
-
 all: raw-c-neural-network
 
 $(OBJ_DIR)/%.o: %.c
@@ -42,13 +41,12 @@ libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
-#libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) libNeuralNetworkUtils.a
 libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
-	$(CC) -c -o $@ $^
+	$(CC) -g -c -o $@ $^
 
 raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a libNeuralNetworkUtils.a
 	$(CC) $(CFLAGS) -o $@ $^

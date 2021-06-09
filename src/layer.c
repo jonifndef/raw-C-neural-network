@@ -42,12 +42,22 @@ void forwardDense(LayerDense* layer, const DynamicMatrix *inputs)
 {
     // The rows in this instance represent the batches
     // We want to calculate the the output of each neuron for each of the batches
+    // TODO: Calculate the dimensions of the output matrix, set output matrix accordingly
+    // Do dot product based on transposed matricies instead, this version is too far off the real math
     for (int i = 0; i < inputs->rows; i++)
     {
+        DynamicArray *outputArr = createDynamicArr();
+
         for (int j = 0; j < layer->numNeurons; j++)
         {
-            setDynamicMatrixElement(layer->outputs, i, j, getNeuronOutput(&layer->neurons[j], getDynamicMatrixRowRef(inputs, i)));
+            //setDynamicMatrixElement(
+            //    layer->outputs, i, j,
+            //    getNeuronOutput(&layer->neurons[j], getDynamicMatrixRowRef(inputs, i)));
+            pushBackDynamicArr(outputArr,
+                               getNeuronOutput(&layer->neurons[j],
+                               getDynamicMatrixRowRef(inputs, i)));
         }
+        pushRow(layer->outputs, outputArr, DO_NOT_TAKE_OWNERSHIP);
     }
 }
 
