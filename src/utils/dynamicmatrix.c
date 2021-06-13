@@ -254,7 +254,8 @@ static bool eraseAndMoveDynamicMatrixColumns(DynamicMatrix *matrix, int columnPo
     return true;
 }
 
-DynamicMatrix* createDynamicMatrix()
+static DynamicMatrix* allocateDynamicMatrix(const uint rowCapacity,
+                                            const uint columnCapacity)
 {
     DynamicMatrix *matrix = calloc(1, sizeof(DynamicMatrix));
     if (matrix == NULL)
@@ -267,7 +268,7 @@ DynamicMatrix* createDynamicMatrix()
 
     // a 4x4 matrix might be suitable as a default size
     // createDynamicArr() returns a dynamic array with a capacity of 4
-    matrix->rowCapacity = 4;
+    matrix->rowCapacity = rowCapacity;
     matrix->data = calloc(matrix->rowCapacity, sizeof(DynamicArray*));
     if (matrix->data == NULL)
     {
@@ -276,16 +277,26 @@ DynamicMatrix* createDynamicMatrix()
 
     for (int i = 0; i < matrix->rowCapacity; i++)
     {
-        matrix->data[i] = createDynamicArr();
+        matrix->data[i] = createDynamicArrWithCapacity(columnCapacity);
         if (matrix->data[i] == NULL)
         {
             return NULL;
         }
     }
-    // ugly?
-    matrix->columnCapacity = matrix->data[0]->capacity;
+    matrix->columnCapacity = columnCapacity;
 
     return matrix;
+}
+
+DynamicMatrix* createDynamicMatrix()
+{
+    return allocateDynamicMatrix(4, 4);
+}
+
+DynamicMatrix* createDynamicMatrixWithCapacity(const uint rowCapacity,
+                                               const uint columnCapacity)
+{
+    return allocateDynamicMatrix(rowCapacity, columnCapacity);
 }
 
 void freeDynamicMatrix(DynamicMatrix *matrix)
@@ -634,6 +645,19 @@ DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row)
     return (row < matrix->rows && row >= 0) ? matrix->data[row] : NULL;
 }
 
+DynamicArray* getDynamicMatrixRowCopy(const DynamicMatrix *matrix, int row)
+{
+    if (row < matrix->rows && row >= 0)
+    {
+        DynamicArray *rowCopy = createDynamicArr();
+        if (copyDynamicArr(rowCopy, matrix->data[row]))
+        {
+            return rowCopy;
+        }
+    }
+    return NULL;
+}
+
 DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int column)
 {
     if (column < matrix->columns && column >= 0)
@@ -741,4 +765,69 @@ void printDynamicMatrix(DynamicMatrix *matrix)
         printf("\n");
     }
     printf("\n");
+}
+
+DynamicMatrix* dotProductDynamicMatrix(const DynamicMatrix *lhs,
+                                       const DynamicMatrix *rhs)
+{
+    // The lenght of each row in lhs must be the same as the length of each column in rhs
+    // a.k.a lhs->columns == rhs->rows
+    // Output size: the output matrix will have the same number of rows as lhs,
+    // and the same number of columns as rhs
+    if (lhs->columns != rhs->rows)
+    {
+        return NULL;
+    }
+
+    DynamicMatrix *dotProduct = createDynamicMatrixWithCapacity(lhs->rows, rhs->columns);
+    if (!dotProduct)
+    {
+        return NULL;
+    }
+
+    for (int i = 0; i < lhs->rows; i++)
+    {
+        DynamicArray *dotProductRow = createDynamicArrWithCapacity(rhs->columns);
+        if (!dotProductRow)
+        {
+            return NULL;
+        }
+
+        for (int j = 0; j < rhs->columns; j++)
+        {
+            double element = 0;
+            for (int k = 0; k < lhs->columns; k++)
+            {
+                element += lhs->data[i]->data[k] * rhs->data[k]->data[j];
+            }
+            if (!pushBackDynamicArr(dotProductRow, element))
+            {
+                return NULL;
+            }
+        }
+        if (!pushRow(dotProduct, dotProductRow, DO_TAKE_OWNERSHIP))
+        {
+            return NULL;
+        }
+    }
+    return dotProduct;
+}
+
+DynamicMatrix* createDynamicMatrixTranspose(const DynamicMatrix *matrix)
+{
+    DynamicMatrix *transpose = allocateDynamicMatrix(matrix->columns, matrix->rows);
+    if (!transpose)
+    {
+        return NULL;
+    }
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        if (!pushColumn(transpose, getDynamicMatrixRowCopy(matrix, i)))
+        {
+            freeDynamicMatrix(transpose);
+            return NULL;
+        }
+    }
+
+    return transpose;
 }

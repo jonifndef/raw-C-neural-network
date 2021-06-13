@@ -101,6 +101,11 @@ DynamicArray* createPopulatedDynamicArr(double *inputArray, uint size)
     return array;
 }
 
+DynamicArray* createDynamicArrWithCapacity(const uint capacity)
+{
+    return allocateDynamicArr(capacity);
+}
+
 void freeDynamicArr(DynamicArray *array)
 {
     free(array->data);

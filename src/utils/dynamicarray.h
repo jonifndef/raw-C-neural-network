@@ -13,7 +13,8 @@ typedef struct DynamicArray
 bool reAllocDynamicArr(DynamicArray *arr, int newCapacity);
 
 DynamicArray* createDynamicArr();
-DynamicArray* createPopulatedDynamicArr(double *arr, uint size);
+DynamicArray* createPopulatedDynamicArr(double *arr, const uint size);
+DynamicArray* createDynamicArrWithCapacity(const uint capacity);
 void freeDynamicArr(DynamicArray *array);
 
 bool pushBackDynamicArr(DynamicArray *array, double element);

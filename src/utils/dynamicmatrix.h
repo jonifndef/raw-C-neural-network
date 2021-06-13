@@ -20,6 +20,8 @@ typedef enum TakeOwnerShip
 } TakeOwnerShip;
 
 DynamicMatrix* createDynamicMatrix();
+DynamicMatrix* createDynamicMatrixWithCapacity(const uint rowCapacity,
+                                               const uint columnCapacity);
 void freeDynamicMatrix(DynamicMatrix *matrix);
 
 bool pushRow(DynamicMatrix *matrix, DynamicArray *row, const TakeOwnerShip option);
@@ -37,14 +39,17 @@ bool setDynamicMatrixColumn(DynamicMatrix *matrix, int columnPosition, const Dyn
 bool setDynamicMatrixElement(DynamicMatrix *matrix, int row, int column, double element);
 
 DynamicArray* getDynamicMatrixRowRef(const DynamicMatrix *matrix, int row);
+DynamicArray* getDynamicMatrixRowCopy(const DynamicMatrix *matrix, int row);
 DynamicArray* createDynamicMatrixColumnCopy(const DynamicMatrix *matrix, int column);
 double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column);
 
-void transposeDynamicMatrix(DynamicMatrix *matrix);
+DynamicMatrix* createDynamicMatrixTranspose(const DynamicMatrix *matrix);
 bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source);
 void clearDynamicMatrix(DynamicMatrix *matrix);
 
 // Debug
 void printDynamicMatrix(DynamicMatrix *matrix);
+DynamicMatrix* dotProductDynamicMatrix(const DynamicMatrix *lhs,
+                                       const DynamicMatrix *rhs);
 
 #endif // DYNAMICMATRIX_H_

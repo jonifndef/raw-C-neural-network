@@ -50,14 +50,11 @@ void forwardDense(LayerDense* layer, const DynamicMatrix *inputs)
 
         for (int j = 0; j < layer->numNeurons; j++)
         {
-            //setDynamicMatrixElement(
-            //    layer->outputs, i, j,
-            //    getNeuronOutput(&layer->neurons[j], getDynamicMatrixRowRef(inputs, i)));
             pushBackDynamicArr(outputArr,
                                getNeuronOutput(&layer->neurons[j],
                                getDynamicMatrixRowRef(inputs, i)));
         }
-        pushRow(layer->outputs, outputArr, DO_NOT_TAKE_OWNERSHIP);
+        pushRow(layer->outputs, outputArr, DO_TAKE_OWNERSHIP);
     }
 }
 
