@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
     double biases_2[3] = { -1,  2, -0.5 };
 
     // weights matrix
+    // Here, the first row are the weights associated with the first neuron,
+    // the second row are the weights associated sith the second neuron, etc etc.
     double weights1Row1[] = {  0.2,   0.8,  -0.5,   1.0  };
     double weights1Row2[] = {  0.5,  -0.91,  0.26, -0.5  };
     double weights1Row3[] = { -0.26, -0.27,  0.17,  0.87 };

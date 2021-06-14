@@ -3,6 +3,61 @@
 
 #include "layer.h"
 
+static DynamicMatrix* getWeightsMatrix(const LayerDense *layer)
+{
+    if (layer->numNeurons < 1)
+    {
+        return NULL;
+    }
+
+    uint numRows = layer->numNeurons;
+    uint numColumns = layer->neurons[0].numInputs;
+
+    DynamicMatrix *weights = createDynamicMatrixWithCapacity(numRows, numColumns);
+    if (!weights)
+    {
+        return NULL;
+    }
+
+    for (int i = 0; i < layer->numNeurons; i++)
+    {
+        DynamicArray *weightsRow = createDynamicArrWithCapacity(numColumns);
+        if (!weightsRow)
+        {
+            return NULL;
+        }
+
+        for (int j = 0; j < layer->neurons[0].numInputs; j++)
+        {
+            if (!pushBackDynamicArr(weightsRow, layer->neurons[i].weights[j]))
+            {
+                return NULL;
+            }
+        }
+        if (!pushRow(weights, weightsRow, DO_TAKE_OWNERSHIP))
+        {
+            return NULL;
+        }
+    }
+    return weights;
+}
+
+static bool addBiasesToOutput(LayerDense *layer)
+{
+    for (int i = 0; i < layer->outputs->rows; i++)
+    {
+        for (int j = 0; j < layer->numNeurons; j++)
+        {
+            double element = layer->outputs->data[i]->data[j] + layer->neurons[j].bias;
+            if (!setDynamicMatrixElement(layer->outputs, i, j, element))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 LayerDense *createLayerDense(int numNeurons,
                              int batchSize,
                              int numNeuronsPrevLayerDense,
@@ -38,28 +93,38 @@ void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
     }
 }
 
-void forwardDense(LayerDense* layer, const DynamicMatrix *inputs)
+bool forwardDense(LayerDense* layer,
+                  const DynamicMatrix *inputs)
 {
-    // The rows in this instance represent the batches
+    // The rows in the inputs matrix represent the batches
     // We want to calculate the the output of each neuron for each of the batches
-    // TODO: Calculate the dimensions of the output matrix, set output matrix accordingly
-    // Do dot product based on transposed matricies instead, this version is too far off the real math
-    for (int i = 0; i < inputs->rows; i++)
+    DynamicMatrix *weights = getWeightsMatrix(layer);
+    if (!weights)
     {
-        DynamicArray *outputArr = createDynamicArr();
-
-        for (int j = 0; j < layer->numNeurons; j++)
-        {
-            pushBackDynamicArr(outputArr,
-                               getNeuronOutput(&layer->neurons[j],
-                               getDynamicMatrixRowRef(inputs, i)));
-        }
-        pushRow(layer->outputs, outputArr, DO_TAKE_OWNERSHIP);
+        return false;
     }
+
+    printf("printing weights matrix:\n");
+    printDynamicMatrix(weights);
+
+    layer->outputs = createDynamicMatrixTranspose(
+            dotProductDynamicMatrix(weights, createDynamicMatrixTranspose(inputs))
+    );
+
+    if (!layer->outputs)
+    {
+        return false;
+    }
+
+    if (!addBiasesToOutput(layer))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 DynamicMatrix* getOutputsFromLayerDense(const LayerDense* layer)
 {
     return layer->outputs;
 }
-

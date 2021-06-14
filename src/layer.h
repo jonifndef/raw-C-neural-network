@@ -21,7 +21,8 @@ void freeLayerDenseContents(LayerDense *layer);
 void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
                                         const DynamicMatrix *weights,
                                         const double *biases);
-void forwardDense(LayerDense *layer, const DynamicMatrix *inputs);
+bool forwardDense(LayerDense *layer,
+                  const DynamicMatrix *inputs);
 DynamicMatrix* getOutputsFromLayerDense(const LayerDense *layer);
 
 #endif // LAYER_H_
