@@ -104,9 +104,6 @@ bool forwardDense(LayerDense* layer,
         return false;
     }
 
-    printf("printing weights matrix:\n");
-    printDynamicMatrix(weights);
-
     layer->outputs = createDynamicMatrixTranspose(
             dotProductDynamicMatrix(weights, createDynamicMatrixTranspose(inputs))
     );

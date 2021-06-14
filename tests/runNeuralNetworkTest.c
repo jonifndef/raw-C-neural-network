@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv)
 {
-    Suite *s1 = suite_create("utilsTest");
+    Suite *s1 = suite_create("batches_and_layers_test");
     SRunner *sr = srunner_create(s1);
     int numFailed;
 

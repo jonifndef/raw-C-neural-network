@@ -10,17 +10,24 @@ LIBRAWCNEURALNETWORK_SOURCES := \
 	$(SRC_DIR)/layer.c \
 	$(SRC_DIR)/neuron.c \
 
+LIBRAWCNEURALNETWORK_UTILS_SOURCES := \
+	$(UTILS_DIR)/dynamicarray.c \
+	$(UTILS_DIR)/dynamicmatrix.c \
+	$(UTILS_DIR)/fileIO.c \
+
+LIBRAWCNEURALNETWORK_LEGACY_SOURCES := \
+	$(SRC_DIR)/activationfunctions.c \
+	$(SRC_DIR)/legacy_layer.c \
+	$(SRC_DIR)/legacy_neuron.c \
+	$(UTILS_DIR)/matrix.c \
+	$(UTILS_DIR)/fileIO.c
+
 LIBRAWCNEURALNETWORK_OBJECTS := \
 	$(patsubst %.c, %.o, $(LIBRAWCNEURALNETWORK_SOURCES))
 LIBRAWCNEURALNETWORK_OBJECTS := \
 	$(notdir $(LIBRAWCNEURALNETWORK_OBJECTS))
 LIBRAWCNEURALNETWORK_OBJECTS := \
 	$(addprefix obj/, $(LIBRAWCNEURALNETWORK_OBJECTS))
-
-LIBRAWCNEURALNETWORK_UTILS_SOURCES := \
-	$(UTILS_DIR)/dynamicarray.c \
-	$(UTILS_DIR)/dynamicmatrix.c \
-	$(UTILS_DIR)/fileIO.c \
 
 LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 	$(patsubst %.c, %.o, $(LIBRAWCNEURALNETWORK_UTILS_SOURCES))
@@ -29,10 +36,17 @@ LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 	$(addprefix obj/, $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS))
 
+LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
+	$(patsubst %.c, %.o, $(LIBRAWCNEURALNETWORK_LEGACY_SOURCES))
+LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
+	$(notdir $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS))
+LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
+	$(addprefix obj/, $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS))
 
-vpath %.c $(SRC_DIR):$(UTILS_DIR)
 
-all: raw-c-neural-network
+vpath %.c $(SRC_DIR):$(UTILS_DIR):$(TEST_DIR)
+
+all: raw-c-neural-network tests
 
 $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
@@ -45,15 +59,22 @@ libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) $(LIBRAWCNEURALNETWORK_U
 	ar rcs $@ $^
 	ranlib $@
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
-	$(CC) -g -c -o $@ $^
-
-raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a libNeuralNetworkUtils.a
+raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a
 	$(CC) $(CFLAGS) -o $@ $^
-	#$(CC) $(CFLAGS) -o $@ $^
+
+utilsTest: $(OBJ_DIR)/runUtilsTests.o libNeuralNetworkUtils.a
+	$(CC) $(CFLAGS) -o $@ $^ -lcheck
+
+neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o libRawCNeuralNetwork.a
+	$(CC) $(CFLAGS) -o $@ $^ -lcheck
+
+legacyTest: $(OBJ_DIR)/runLegacyTest.o $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ -lcheck
+
+tests: utilsTest neuralNetworkTest legacyTest
 
 clean:
-	@find * ! -name "Makefile" ! -name "obj" ! -name "Makefile_old" -delete
+	@find * ! -name "Makefile" ! -name "obj" -delete
 	@rm -f obj/*
 
-.PHONY: all tests clean #raw-c-neural-network libNeuralNetworkUtils.a libRawCNeuralNetwork.a libRawCNeuralNetworkLegacy.a utilsTest legacyTest neuralNetworkTest
+.PHONY: all tests clean

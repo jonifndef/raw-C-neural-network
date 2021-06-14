@@ -120,9 +120,6 @@ START_TEST(batches_and_layers_test)
     ck_assert_float_eq(getDynamicMatrixElement(outputs2, 2, 1), 1.41254);
     ck_assert_float_eq(getDynamicMatrixElement(outputs2, 2, 2), -0.35655);
 
-    freeDynamicMatrix(outputs1);
-    freeDynamicMatrix(outputs2);
-
     freeLayerDenseContents(layer1);
     freeLayerDenseContents(layer2);
 }
