@@ -26,11 +26,12 @@ int main(int argc, char *argv[])
     double weights1Row2[] = {  0.5,  -0.91,  0.26, -0.5  };
     double weights1Row3[] = { -0.26, -0.27,  0.17,  0.87 };
 
-    DynamicMatrix *weights_1 = createDynamicMatrix();
-    pushRow(weights_1, createPopulatedDynamicArr(weights1Row1, 4), DO_TAKE_OWNERSHIP);
-    pushRow(weights_1, createPopulatedDynamicArr(weights1Row2, 4), DO_TAKE_OWNERSHIP);
-    pushRow(weights_1, createPopulatedDynamicArr(weights1Row3, 4), DO_TAKE_OWNERSHIP);
+    DynamicMatrix *weights_1_og = createDynamicMatrix();
+    pushRow(weights_1_og, createPopulatedDynamicArr(weights1Row1, 4), DO_TAKE_OWNERSHIP);
+    pushRow(weights_1_og, createPopulatedDynamicArr(weights1Row2, 4), DO_TAKE_OWNERSHIP);
+    pushRow(weights_1_og, createPopulatedDynamicArr(weights1Row3, 4), DO_TAKE_OWNERSHIP);
 
+    DynamicMatrix *weights_1 = createDynamicMatrixTranspose(weights_1_og);
     printf("Printing weights_1:\n");
     printDynamicMatrix(weights_1);
 
@@ -38,11 +39,12 @@ int main(int argc, char *argv[])
     double weights2Row2[] = { -0.5,  0.12, -0.33 };
     double weights2Row3[] = { -0.44, 0.73, -0.13 };
 
-    DynamicMatrix *weights_2 = createDynamicMatrix();
-    pushRow(weights_2, createPopulatedDynamicArr(weights2Row1, 3), DO_TAKE_OWNERSHIP);
-    pushRow(weights_2, createPopulatedDynamicArr(weights2Row2, 3), DO_TAKE_OWNERSHIP);
-    pushRow(weights_2, createPopulatedDynamicArr(weights2Row3, 3), DO_TAKE_OWNERSHIP);
+    DynamicMatrix *weights_2_og = createDynamicMatrix();
+    pushRow(weights_2_og, createPopulatedDynamicArr(weights2Row1, 3), DO_TAKE_OWNERSHIP);
+    pushRow(weights_2_og, createPopulatedDynamicArr(weights2Row2, 3), DO_TAKE_OWNERSHIP);
+    pushRow(weights_2_og, createPopulatedDynamicArr(weights2Row3, 3), DO_TAKE_OWNERSHIP);
 
+    DynamicMatrix *weights_2 = createDynamicMatrixTranspose(weights_2_og);
     printf("Printing weights_2:\n");
     printDynamicMatrix(weights_2);
 

@@ -1,7 +1,9 @@
 #ifndef ACTIVATIONFUNCTIONS_H_
 #define ACTIVATIONFUNCTIONS_H_
 
-double relu(double input);
-double linear(double input);
+#include "utils/dynamicmatrix.h"
+
+DynamicMatrix* relu(DynamicMatrix *input);
+DynamicMatrix* linear(DynamicMatrix *input);
 
 #endif //ACTIVATIONFUNCTIONS_H_

@@ -7,7 +7,7 @@
 #include <time.h>
 
 #include "../src/legacy_layer.h"
-#include "../src/activationfunctions.h"
+#include "../src/legacy_activationfunctions.h"
 
 START_TEST(legacy_batches_and_layers_test)
 {

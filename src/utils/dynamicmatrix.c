@@ -743,15 +743,44 @@ bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
     return true;
 }
 
-void clearDynamicMatrix(DynamicMatrix *matrix)
+// TODO: Add tests!
+bool copyDynamicMatrixElements(DynamicMatrix *destination, const DynamicMatrix *source)
+{
+    if ((destination->rows != source->rows) ||
+        (destination->columns != source->columns))
+    {
+        return false;
+    }
+    
+    for (int i = 0; i < destination->rows; i++)
+    {
+        for (int j = 0; j < destination->columns; j++)
+        {
+            if (!setDynamicMatrixElement(destination, i, j,
+                                         getDynamicMatrixElement(source, i, j)))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool clearDynamicMatrix(DynamicMatrix *matrix)
 {
     for (int i = 0; i < matrix->rows; i++)
     {
         for (int j = 0; j < matrix->columns; j++)
         {
-            setDynamicMatrixElement(matrix, i, j, 0.0);
+            if (!setDynamicMatrixElement(matrix, i, j, 0.0))
+            {
+                return false;
+            }
         }
     }
+
+    return true;
 }
 
 void printDynamicMatrix(DynamicMatrix *matrix)

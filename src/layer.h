@@ -7,18 +7,19 @@
 
 typedef struct LayerDense
 {
-    int numNeurons;
-    Neuron *neurons;
+    int numNeurons; // Needed as an explicit field?
+    double* biases;
+    DynamicMatrix *weights;
     DynamicMatrix *outputs;
-    void *activationFunction; //will be a function pointer once we implement them
+    DynamicMatrix* (*activationFunction)(DynamicMatrix*);
 } LayerDense;
 
-LayerDense* createLayerDense(int numNeurons,
-                             int batchSize,
-                             int numNeuronsPrevLayer,
-                             double (*activationFunction)(double));
+LayerDense* createLayerDense(uint numNeurons,
+                             uint batchSize,
+                             uint numInputs,
+                             DynamicMatrix* (*activationFunction)(DynamicMatrix*));
 void freeLayerDenseContents(LayerDense *layer);
-void updateWeightsAndBiasesInLayerDense(LayerDense *layer,
+bool updateWeightsAndBiasesInLayerDense(LayerDense *layer,
                                         const DynamicMatrix *weights,
                                         const double *biases);
 bool forwardDense(LayerDense *layer,

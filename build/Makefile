@@ -16,7 +16,7 @@ LIBRAWCNEURALNETWORK_UTILS_SOURCES := \
 	$(UTILS_DIR)/fileIO.c \
 
 LIBRAWCNEURALNETWORK_LEGACY_SOURCES := \
-	$(SRC_DIR)/activationfunctions.c \
+	$(SRC_DIR)/legacy_activationfunctions.c \
 	$(SRC_DIR)/legacy_layer.c \
 	$(SRC_DIR)/legacy_neuron.c \
 	$(UTILS_DIR)/matrix.c \
@@ -55,7 +55,7 @@ libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
-libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_OBJECTS) $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
+libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS) $(LIBRAWCNEURALNETWORK_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 

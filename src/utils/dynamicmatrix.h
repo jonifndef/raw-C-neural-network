@@ -45,7 +45,8 @@ double getDynamicMatrixElement(const DynamicMatrix *matrix, int row, int column)
 
 DynamicMatrix* createDynamicMatrixTranspose(const DynamicMatrix *matrix);
 bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source);
-void clearDynamicMatrix(DynamicMatrix *matrix);
+bool copyDynamicMatrixElements(DynamicMatrix *destination, const DynamicMatrix *source);
+bool clearDynamicMatrix(DynamicMatrix *matrix);
 
 // Debug
 void printDynamicMatrix(DynamicMatrix *matrix);
