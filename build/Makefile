@@ -11,16 +11,15 @@ LIBRAWCNEURALNETWORK_SOURCES := \
 	$(SRC_DIR)/neuron.c \
 
 LIBRAWCNEURALNETWORK_UTILS_SOURCES := \
+	$(UTILS_DIR)/fileIO.c \
 	$(UTILS_DIR)/dynamicarray.c \
 	$(UTILS_DIR)/dynamicmatrix.c \
-	$(UTILS_DIR)/fileIO.c \
 
 LIBRAWCNEURALNETWORK_LEGACY_SOURCES := \
 	$(SRC_DIR)/legacy_activationfunctions.c \
 	$(SRC_DIR)/legacy_layer.c \
 	$(SRC_DIR)/legacy_neuron.c \
 	$(UTILS_DIR)/matrix.c \
-	$(UTILS_DIR)/fileIO.c
 
 LIBRAWCNEURALNETWORK_OBJECTS := \
 	$(patsubst %.c, %.o, $(LIBRAWCNEURALNETWORK_SOURCES))

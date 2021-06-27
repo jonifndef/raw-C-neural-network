@@ -1,85 +1,121 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <ctype.h>
 
 #include "fileIO.h"
 
-static bool getFileFormat(const char *filePath, int *rows, int *columns)
+static bool firstRow = true;
+
+static bool validateConversion(double *element, char *eptr, char *token)
 {
-    FILE *fp;
-    int numFieldsInRow = 0;
-    int numFieldsFirstRow = 0;
-    int numTokensInField = 0;
-    char c = '_';
-
-    fp = fopen(filePath, "r");
-    if (fp == NULL)
-        return false;
-
-    while (c != EOF)
+    if (*element == 0 && (errno != 0 || eptr == token))
     {
-        c = getc(fp);
-        if (c == ' ')
-        {
-            if (numTokensInField > 0)
-            {
-                numFieldsInRow++;
-                numTokensInField = 0;
-            }
-            else
-            {
-                // it's an invalid row
-                return false;
-            }
-        }
-        else if (c == '\n')
-        {
-            if (numFieldsInRow > 0)
-            {
-                if (*rows == 0)
-                    numFieldsFirstRow = numFieldsInRow;
-                else if (numFieldsFirstRow != numFieldsInRow)
-                    return false; // unmatching rows
-
-                if (numTokensInField > 0)
-                    numFieldsInRow++;
-                else
-                    return false; // invalid format
-                *columns = numFieldsInRow;
-                numFieldsInRow = 0;
-                (*rows)++;
-            }
-            else
-            {
-                // it's an invalid row
-                return false;
-            }
-        }
-        else //it's a valid token
-        {
-            numTokensInField++;
-        }
+        return false;
     }
 
-    printf("numfields: %d, numRows: %d\n", *columns, *rows);
-    fclose(fp);
+    // special case where the first char is valid, but subsequent ones are not
+    if (*eptr != '\n')
+    {
+        if (strcmp(eptr, ""))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool validateRowLength(const DynamicArray *row)
+{
+    static int firstRowLength = 0;
+
+    if (firstRow)
+    {
+        firstRowLength = row->size;
+        firstRow = false;
+    }
+    else
+    {
+        if (row->size != firstRowLength)
+        {
+            return false;
+        }
+    }
 
     return true;
 }
 
-//static MatrixDoubles* populateMatrix(const char *filePath,
-//                                    int rows,
-//                                    int columns)
-//{
-//    // TODO: implement
-//    return NULL;
-//}
-
-bool readSampleData(const char* filePath, MatrixDoubles *data)
+static bool readLines(FILE *fp, char *line, const char *delimiter, DynamicMatrix *data)
 {
-    int *rows = calloc(1, sizeof(int));
-    int *columns = calloc(1, sizeof(int));
-    if (!getFileFormat(filePath, rows, columns))
+    int numCharsRead = 0;
+    size_t numBytesAllocated = 0;
+
+    numCharsRead = getline(&line, &numBytesAllocated, fp);
+
+    double element = 0.0;
+    char *eptr;
+    int currentNumColumns = 0;
+
+    while (numCharsRead != -1)
+    {
+        char *token = strtok(line, delimiter);
+
+        DynamicArray *row = createDynamicArr();
+        if (!row)
+        {
+            return false;
+        }
+
+        while (token != NULL)
+        {
+            element = strtod(token, &eptr);
+
+            if (!validateConversion(&element, eptr, token))
+            {
+                return false;
+            }
+
+            if (!pushBackDynamicArr(row, element))
+            {
+                return false;
+            }
+
+            token = strtok(NULL, delimiter);
+        }
+
+        if (!validateRowLength(row))
+        {
+            return false;
+        }
+
+        if (!pushRow(data, row, DO_TAKE_OWNERSHIP))
+        {
+            return false;
+        }
+
+        numCharsRead = getline(&line, &numBytesAllocated, fp);
+    }
+    return true;
+}
+
+bool readSampleData(const char *filePath,
+                    const char *delimiter,
+                    DynamicMatrix *data)
+{
+    FILE *fp;
+    fp = fopen(filePath, "r");
+
+    if (!fp)
+    {
         return false;
-    else
-        return true;
+    }
+
+    char *line = NULL;
+    bool success = readLines(fp, line, delimiter, data);
+
+    free(line);
+    fclose(fp);
+
+    return success;
 }
