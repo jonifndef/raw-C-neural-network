@@ -233,6 +233,7 @@ bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source)
 
     free(destination->data);
     destination->data = newData;
+
     return true;
 }
 
@@ -242,7 +243,38 @@ void clearDynamicArr(DynamicArray *array)
     {
         array->data[i] = 0.0;
     }
+
     array->size = 0;
+}
+
+double getMaxElementDynamicArr(const DynamicArray *array)
+{
+    double maxValue = 0.0;
+    for (int i = 0; i < array->size; i++)
+    {
+        if (array->data[i] > maxValue)
+        {
+            maxValue = array->data[i];
+        }
+    }
+
+    return maxValue;
+}
+
+void addToAllElementsDynamicArr(DynamicArray *array, double value)
+{
+    for (int i = 0; i < array->size; i++)
+    {
+        array->data[i] += value;
+    }
+}
+
+void subtractFromAllElementsDynamicArr(DynamicArray *array, double value)
+{
+    for (int i = 0; i < array->size; i++)
+    {
+        array->data[i] -= value;
+    }
 }
 
 // For debug purposes:

@@ -1,4 +1,4 @@
-#include "legacy_batches_and_layers_test.h"
+#include "testcases/legacy_batches_and_layers_test.h"
 
 int main(int argc, char **argv)
 {

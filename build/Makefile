@@ -59,16 +59,16 @@ libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS) $(LIBRAWCNEURALNET
 	ranlib $@
 
 raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
 utilsTest: $(OBJ_DIR)/runUtilsTests.o libNeuralNetworkUtils.a
-	$(CC) $(CFLAGS) -o $@ $^ -lcheck
+	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
 
 neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o libRawCNeuralNetwork.a
-	$(CC) $(CFLAGS) -o $@ $^ -lcheck
-
+	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
+ 
 legacyTest: $(OBJ_DIR)/runLegacyTest.o $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^ -lcheck
+	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
 
 tests: utilsTest neuralNetworkTest legacyTest
 

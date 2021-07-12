@@ -27,6 +27,7 @@ static bool initializeWeights(LayerDense *layer,
                 return false;
             }
         }
+
         if (!pushRow(layer->weights, row, DO_TAKE_OWNERSHIP))
         {
             return false;
@@ -70,14 +71,13 @@ static bool pushIntoOutputs(DynamicMatrix *layerOutputs,
 LayerDense *createLayerDense(uint numNeurons,
                              uint batchSize,
                              uint numInputs,
-                             DynamicMatrix* (*activationFunction)(DynamicMatrix*))
+                             bool (*activationFunction)(DynamicMatrix*))
 {
     // Only run srand once, the first time we create a layer
     if (!srandRun)
     {
         srand(time(0));
         srandRun = true;
-        printf("Srand run!\n");
     }
 
     LayerDense *layer= calloc(1, sizeof(LayerDense));
@@ -156,6 +156,14 @@ bool forwardDense(LayerDense* layer,
     }
 
     if (!addBiasesToOutput(outputs, layer->biases))
+    {
+        return false;
+    }
+
+    printf("output before activationFunction\n");
+    printDynamicMatrix(outputs);
+
+    if (!layer->activationFunction(outputs))
     {
         return false;
     }

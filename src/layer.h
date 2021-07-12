@@ -11,13 +11,13 @@ typedef struct LayerDense
     double* biases;
     DynamicMatrix *weights;
     DynamicMatrix *outputs;
-    DynamicMatrix* (*activationFunction)(DynamicMatrix*);
+    bool (*activationFunction)(DynamicMatrix*);
 } LayerDense;
 
 LayerDense* createLayerDense(uint numNeurons,
                              uint batchSize,
                              uint numInputs,
-                             DynamicMatrix* (*activationFunction)(DynamicMatrix*));
+                             bool (*activationFunction)(DynamicMatrix*));
 void freeLayerDenseContents(LayerDense *layer);
 bool updateWeightsAndBiasesInLayerDense(LayerDense *layer,
                                         const DynamicMatrix *weights,

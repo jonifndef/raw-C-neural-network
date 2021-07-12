@@ -3,7 +3,8 @@
 
 #include "utils/dynamicmatrix.h"
 
-DynamicMatrix* relu(DynamicMatrix *input);
-DynamicMatrix* linear(DynamicMatrix *input);
+bool relu(DynamicMatrix *input);
+bool linear(DynamicMatrix *input);
+bool softmax(DynamicMatrix *input);
 
 #endif //ACTIVATIONFUNCTIONS_H_

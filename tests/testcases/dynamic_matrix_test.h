@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <check.h>
 
-#include "../src/utils/dynamicmatrix.h"
+#include "../../src/utils/dynamicmatrix.h"
 
 START_TEST(dynamicMatrixTest)
 {

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <check.h>
 
-#include "../src/utils/dynamicarray.h"
+#include "../../src/utils/dynamicarray.h"
 
 START_TEST(dynamicArrTest)
 {

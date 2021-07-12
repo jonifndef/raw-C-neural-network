@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../src/layer.h"
-#include "../src/activationfunctions.h"
+#include "../../src/layer.h"
+#include "../../src/activationfunctions.h"
 
 START_TEST(batches_and_layers_test)
 {

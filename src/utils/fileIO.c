@@ -55,7 +55,6 @@ static bool readLines(FILE *fp, char *line, const char *delimiter, DynamicMatrix
 
     double element = 0.0;
     char *eptr;
-    int currentNumColumns = 0;
 
     while (numCharsRead != -1)
     {

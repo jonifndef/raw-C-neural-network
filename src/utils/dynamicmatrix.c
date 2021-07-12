@@ -310,7 +310,7 @@ bool pushRow(DynamicMatrix *matrix,
              const TakeOwnerShip ownershipOption)
 {
     // Perform a deep copy of the new row, except its capacity
-    DynamicArray *newRow = createDynamicArr();
+    DynamicArray *newRow = createDynamicArrWithCapacity(row->capacity);
     for (int i = 0; i < getDynamicArrSize(row); i++)
     {
         if (!pushBackDynamicArr(newRow, getDynamicArrElement(row, i)))

@@ -1,5 +1,5 @@
-#include "dynamic_arrays_test.h"
-#include "dynamic_matrix_test.h"
+#include "testcases/dynamic_arrays_test.h"
+#include "testcases/dynamic_matrix_test.h"
 
 int main(int argc, char **argv)
 {

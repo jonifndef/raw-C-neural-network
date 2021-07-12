@@ -33,6 +33,10 @@ double frontDynamicArr(const DynamicArray *array);
 bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source);
 void clearDynamicArr(DynamicArray *array);
 
+double getMaxElementDynamicArr(const DynamicArray *array);
+void addToAllElementsDynamicArr(DynamicArray *array, double value);
+void subtractFromAllElementsDynamicArr(DynamicArray *array, double value);
+
 // For debug purposes:
 void printDynamicArr(const DynamicArray *array);
 
