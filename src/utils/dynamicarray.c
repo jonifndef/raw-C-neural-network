@@ -21,7 +21,7 @@ static bool insertAndMoveDynamicArr(DynamicArray *array,
     array->data[position] = element;
     array->size++;
 
-    free(arrCopy);
+    freeDynamicArr(arrCopy);
     return true;
 }
 
@@ -39,7 +39,7 @@ static bool eraseAndMoveDynamicArr(DynamicArray *array, int position)
     }
     array->size--;
 
-    free(arrCopy);
+    freeDynamicArr(arrCopy);
     return true;
 }
 
