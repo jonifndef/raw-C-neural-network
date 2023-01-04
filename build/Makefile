@@ -48,6 +48,7 @@ vpath %.c $(SRC_DIR):$(UTILS_DIR):$(TEST_DIR)
 all: raw-c-neural-network tests
 
 $(OBJ_DIR)/%.o: %.c
+	@mkdir -p obj
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
@@ -74,6 +75,6 @@ tests: utilsTest neuralNetworkTest legacyTest
 
 clean:
 	@find * ! -name "Makefile" ! -name "obj" -delete
-	@rm -f obj/*
+	@rm -rf obj
 
 .PHONY: all tests clean
