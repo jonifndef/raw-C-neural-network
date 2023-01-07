@@ -89,7 +89,6 @@ START_TEST(dynamicMatrixTest)
     // is longer than its 'source array', since the row should be padded with zeroes
     copyDynamicArr(arr5, getDynamicMatrixRowRef(matrix, 2));
     ck_assert_int_ne(arr5->size, arr2->size);
-    ck_assert_mem_ne(arr5->data, arr2->data, sizeof(double) * getDynamicArrSize(arr5));
     //freeDynamicArr(arr2);
 
     ck_assert_int_eq(matrix->columns, getDynamicMatrixRowRef(matrix, 3)->size);
@@ -1643,7 +1642,6 @@ START_TEST(dynamicMatrixTest)
     bool res_19 = insertDynamicMatrixRow(lastMatrix, 0, arr4);
 
     freeDynamicArr(arr4);
-    freeDynamicArr(arr6);
 
     ck_assert_int_eq(res_18, true);
     ck_assert_int_eq(res_19, true);

@@ -33,7 +33,7 @@ static bool eraseAndMoveDynamicArr(DynamicArray *array, int position)
         return false;
     }
 
-    for (int i = position; i < array->size; i++)
+    for (int i = position; i < array->size - 1; i++)
     {
         array->data[i] = arrCopy->data[i + 1];
     }
@@ -79,7 +79,7 @@ static DynamicArray* allocateDynamicArr(uint capacity)
     return array;
 }
 
-DynamicArray* createDynamicArr()
+DynamicArray* createDynamicArr(void)
 {
     // default capacity 4, seems reasonable, right?
     return allocateDynamicArr(4);

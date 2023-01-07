@@ -19,7 +19,7 @@ typedef enum TakeOwnerShip
     DO_TAKE_OWNERSHIP = 1
 } TakeOwnerShip;
 
-DynamicMatrix* createDynamicMatrix();
+DynamicMatrix* createDynamicMatrix(void);
 DynamicMatrix* createDynamicMatrixWithCapacity(const uint rowCapacity,
                                                const uint columnCapacity);
 void freeDynamicMatrix(DynamicMatrix *matrix);
