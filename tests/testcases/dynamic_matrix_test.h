@@ -1642,6 +1642,7 @@ START_TEST(dynamicMatrixTest)
     bool res_19 = insertDynamicMatrixRow(lastMatrix, 0, arr4);
 
     freeDynamicArr(arr4);
+    freeDynamicArr(arr5);
 
     ck_assert_int_eq(res_18, true);
     ck_assert_int_eq(res_19, true);

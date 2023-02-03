@@ -393,6 +393,8 @@ bool pushColumn(DynamicMatrix *matrix, DynamicArray *column)
         return false;
     }
 
+    freeDynamicArr(newColumn);
+
     return true;
 }
 
@@ -451,7 +453,7 @@ bool pushColumnElement(DynamicMatrix *matrix, int columnPosition, double element
                 }
             }
         }
-        if (!pushRow(matrix, arr, DO_NOT_TAKE_OWNERSHIP))
+        if (!pushRow(matrix, arr, DO_TAKE_OWNERSHIP))
         {
             return false;
         }
@@ -707,40 +709,21 @@ bool copyDynamicMatrix(DynamicMatrix *destination, const DynamicMatrix *source)
 
     for (int i = 0; i < destination->rowCapacity; i++)
     {
-        // Shouldn't be createDynamicArr here, right?! Just regular ol' calloc
-        destination->data[i] = createDynamicArr();
+        destination->data[i] = createDynamicArrWithCapacity(destination->columnCapacity);
         if (destination->data[i] == NULL)
         {
             return false;
         }
     }
 
-    for (int i = 0; i < destination->rowCapacity; i++)
+    for (int i = 0; i < source->rows; i++)
     {
-        if (i < destination->rows)
+        if (!copyDynamicArr(destination->data[i], source->data[i]))
         {
-            if (!copyDynamicArr(destination->data[i], source->data[i]))
-            {
-                return false;
-            }
-        }
-        else
-        {
-            destination->data[i] = calloc(1, sizeof(DynamicArray));
-            if (destination->data[i] == NULL)
-            {
-                return false;
-            }
-
-            destination->data[i]->data = calloc(destination->columnCapacity, sizeof(double));
-            if (destination->data[i]->data == NULL)
-            {
-                return false;
-            }
-            destination->data[i]->capacity = destination->columnCapacity;
-            destination->data[i]->size = 0;
+            return false;
         }
     }
+
     return true;
 }
 
