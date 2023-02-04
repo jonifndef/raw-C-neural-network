@@ -24,6 +24,6 @@ bool updateWeightsAndBiasesInLayerDense(LayerDense *layer,
                                         const double *biases);
 bool forwardDense(LayerDense *layer,
                   const DynamicMatrix *inputs);
-DynamicMatrix* getOutputsFromLayerDense(const LayerDense *layer);
+bool getOutputCopyFromLayerDense(const LayerDense *layer, DynamicMatrix *outputDestination);
 
 #endif // LAYER_H_

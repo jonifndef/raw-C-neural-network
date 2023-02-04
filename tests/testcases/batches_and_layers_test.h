@@ -69,7 +69,9 @@ START_TEST(batches_and_layers_test)
     updateWeightsAndBiasesInLayerDense(layer2, weights_2, biases_2);
 
     forwardDense(layer1, inputs);
-    outputs1 = getOutputsFromLayerDense(layer1);
+    bool res1 = getOutputCopyFromLayerDense(layer1, outputs1);
+
+    ck_assert_int_eq(res1, true);
 
     // Correct answers for layer 1:
     //      4.8,     1.21,     2.385
@@ -89,7 +91,9 @@ START_TEST(batches_and_layers_test)
     ck_assert_float_eq(getDynamicMatrixElement(outputs1, 2, 2), 0.026);
 
     forwardDense(layer2, outputs1);
-    outputs2 = getOutputsFromLayerDense(layer2);
+    bool res2 = getOutputCopyFromLayerDense(layer2, outputs2);
+
+    ck_assert_int_eq(res2, true);
 
     // Correct answers for layer 2:
     //      0.5031, -1.04185, -2.03875
@@ -108,8 +112,15 @@ START_TEST(batches_and_layers_test)
     ck_assert_float_eq(getDynamicMatrixElement(outputs2, 2, 1), 1.41254);
     ck_assert_float_eq(getDynamicMatrixElement(outputs2, 2, 2), -0.35655);
 
+    freeDynamicMatrix(inputs);
+    freeDynamicMatrix(weights_1);
+    freeDynamicMatrix(weights_2);
+
     freeLayerDenseContents(layer1);
     freeLayerDenseContents(layer2);
+
+    freeDynamicMatrix(outputs1);
+    freeDynamicMatrix(outputs2);
 }
 END_TEST
 

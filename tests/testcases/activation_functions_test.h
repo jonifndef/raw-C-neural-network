@@ -33,9 +33,12 @@ START_TEST(activation_functions_test)
 
     forwardDense(layer, inputs);
 
-    DynamicMatrix *outputs = getOutputsFromLayerDense(layer);
+
+    DynamicMatrix *outputs = createDynamicMatrix();
+    getOutputCopyFromLayerDense(layer, outputs);
     printDynamicMatrix(outputs);
 
+    freeDynamicMatrix(outputs);
     freeDynamicMatrix(inputs);
     freeLayerDenseContents(layer);
 }

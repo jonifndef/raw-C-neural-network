@@ -189,7 +189,7 @@ bool forwardDense(LayerDense* layer,
     return true;
 }
 
-DynamicMatrix* getOutputsFromLayerDense(const LayerDense* layer)
+bool getOutputCopyFromLayerDense(const LayerDense* layer, DynamicMatrix *outputDestination)
 {
-    return layer->outputs;
+    return copyDynamicMatrix(outputDestination, layer->outputs);
 }

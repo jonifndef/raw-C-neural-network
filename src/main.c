@@ -73,7 +73,8 @@ int main(int argc, char *argv[])
     updateWeightsAndBiasesInLayerDense(layer2, weights_2, biases_2);
 
     forwardDense(layer1, inputs);
-    DynamicMatrix *outputs1 = getOutputsFromLayerDense(layer1);
+    DynamicMatrix *outputs1 = createDynamicMatrix();
+    getOutputCopyFromLayerDense(layer1, outputs1);
 
     // Correct answers for layer 1:
     //      4.8,     1.21,     2.385
@@ -84,7 +85,8 @@ int main(int argc, char *argv[])
     printDynamicMatrix(outputs1);
 
     forwardDense(layer2, outputs1);
-    DynamicMatrix *outputs2 = getOutputsFromLayerDense(layer2);
+    DynamicMatrix *outputs2 = createDynamicMatrix();
+    getOutputCopyFromLayerDense(layer2, outputs2);
 
     // Correct answers for layer 2:
     //      0.5031, -1.04185, -2.03875
@@ -98,5 +100,9 @@ int main(int argc, char *argv[])
 
     freeLayerDenseContents(layer1);
     freeLayerDenseContents(layer2);
+
+    freeDynamicMatrix(outputs1);
+    freeDynamicMatrix(outputs2);
+
     return 0;
 }
