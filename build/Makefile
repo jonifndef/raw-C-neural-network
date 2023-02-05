@@ -2,6 +2,7 @@ CC := gcc
 CFLAGS := -g -Wall -Wpedantic #-fsanitize=address #-O2 -Werror
 SRC_DIR := ../src
 OBJ_DIR := obj
+OUT_DIR := output
 UTILS_DIR := $(SRC_DIR)/utils
 TEST_DIR := ../tests
 
@@ -45,33 +46,34 @@ LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
 
 vpath %.c $(SRC_DIR):$(UTILS_DIR):$(TEST_DIR)
 
-all: raw-c-neural-network tests
+all: $(OUT_DIR)/raw-c-neural-network tests
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p obj
+	@mkdir -p output
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
+$(OUT_DIR)/libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
-libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS) $(LIBRAWCNEURALNETWORK_OBJECTS)
+$(OUT_DIR)/libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS) $(LIBRAWCNEURALNETWORK_OBJECTS)
 	ar rcs $@ $^
 	ranlib $@
 
-raw-c-neural-network: $(OBJ_DIR)/main.o libRawCNeuralNetwork.a
+$(OUT_DIR)/raw-c-neural-network: $(OBJ_DIR)/main.o $(OUT_DIR)/libRawCNeuralNetwork.a
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-utilsTest: $(OBJ_DIR)/runUtilsTests.o libNeuralNetworkUtils.a
+$(OUT_DIR)/utilsTest: $(OBJ_DIR)/runUtilsTests.o $(OUT_DIR)/libNeuralNetworkUtils.a
 	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
 
-neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o libRawCNeuralNetwork.a
+$(OUT_DIR)/neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o $(OUT_DIR)/libRawCNeuralNetwork.a
 	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
  
-legacyTest: $(OBJ_DIR)/runLegacyTest.o $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS)
+$(OUT_DIR)/legacyTest: $(OBJ_DIR)/runLegacyTest.o $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
 
-tests: utilsTest neuralNetworkTest legacyTest
+tests: $(OUT_DIR)/utilsTest $(OUT_DIR)/neuralNetworkTest $(OUT_DIR)/legacyTest
 
 clean:
 	@find * ! -name "Makefile" ! -name "obj" -delete
