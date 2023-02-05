@@ -16,12 +16,6 @@ LIBRAWCNEURALNETWORK_UTILS_SOURCES := \
 	$(UTILS_DIR)/dynamicarray.c \
 	$(UTILS_DIR)/dynamicmatrix.c \
 
-LIBRAWCNEURALNETWORK_LEGACY_SOURCES := \
-	$(SRC_DIR)/legacy_activationfunctions.c \
-	$(SRC_DIR)/legacy_layer.c \
-	$(SRC_DIR)/legacy_neuron.c \
-	$(UTILS_DIR)/matrix.c \
-
 LIBRAWCNEURALNETWORK_OBJECTS := \
 	$(patsubst %.c, %.o, $(LIBRAWCNEURALNETWORK_SOURCES))
 LIBRAWCNEURALNETWORK_OBJECTS := \
@@ -35,13 +29,6 @@ LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 	$(notdir $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS))
 LIBRAWCNEURALNETWORK_UTILS_OBJECTS := \
 	$(addprefix obj/, $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS))
-
-LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
-	$(patsubst %.c, %.o, $(LIBRAWCNEURALNETWORK_LEGACY_SOURCES))
-LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
-	$(notdir $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS))
-LIBRAWCNEURALNETWORK_LEGACY_OBJECTS := \
-	$(addprefix obj/, $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS))
 
 
 vpath %.c $(SRC_DIR):$(UTILS_DIR):$(TEST_DIR)
@@ -70,10 +57,7 @@ $(OUT_DIR)/utilsTest: $(OBJ_DIR)/runUtilsTests.o $(OUT_DIR)/libNeuralNetworkUtil
 $(OUT_DIR)/neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o $(OUT_DIR)/libRawCNeuralNetwork.a
 	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
  
-$(OUT_DIR)/legacyTest: $(OBJ_DIR)/runLegacyTest.o $(LIBRAWCNEURALNETWORK_LEGACY_OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
-
-tests: $(OUT_DIR)/utilsTest $(OUT_DIR)/neuralNetworkTest $(OUT_DIR)/legacyTest
+tests: $(OUT_DIR)/utilsTest $(OUT_DIR)/neuralNetworkTest
 
 clean:
 	@find * ! -name "Makefile" ! -name "obj" -delete
