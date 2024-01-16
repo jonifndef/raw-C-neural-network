@@ -40,21 +40,19 @@ $(OBJ_DIR)/%.o: %.c
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-$(BUILD_DIR)/libNeuralNetworkUtils.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
-	ar rcs $@ $^
-	ranlib $@
+$(BUILD_DIR)/libNeuralNetworkUtils.so: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS)
+	$(CC) -shared -o $@ $^
 
-$(BUILD_DIR)/libRawCNeuralNetwork.a: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS) $(LIBRAWCNEURALNETWORK_OBJECTS)
-	ar rcs $@ $^
-	ranlib $@
+$(BUILD_DIR)/libRawCNeuralNetwork.so: $(LIBRAWCNEURALNETWORK_UTILS_OBJECTS) $(LIBRAWCNEURALNETWORK_OBJECTS)
+	$(CC) -shared -o $@ $^
 
-$(BUILD_DIR)/raw-c-neural-network: $(OBJ_DIR)/main.o $(BUILD_DIR)/libRawCNeuralNetwork.a
+$(BUILD_DIR)/raw-c-neural-network: $(OBJ_DIR)/main.o $(BUILD_DIR)/libRawCNeuralNetwork.so
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-$(BUILD_DIR)/utilsTest: $(OBJ_DIR)/runUtilsTests.o $(BUILD_DIR)/libNeuralNetworkUtils.a
+$(BUILD_DIR)/utilsTest: $(OBJ_DIR)/runUtilsTests.o $(BUILD_DIR)/libNeuralNetworkUtils.so
 	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
 
-$(BUILD_DIR)/neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o $(BUILD_DIR)/libRawCNeuralNetwork.a
+$(BUILD_DIR)/neuralNetworkTest: $(OBJ_DIR)/runNeuralNetworkTest.o $(BUILD_DIR)/libRawCNeuralNetwork.so
 	$(CC) $(CFLAGS) -o $@ $^ -lcheck -lm
  
 tests: $(BUILD_DIR)/utilsTest $(BUILD_DIR)/neuralNetworkTest
