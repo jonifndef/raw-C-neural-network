@@ -10,6 +10,7 @@ LIBRAWCNEURALNETWORK_SOURCES := \
 	$(SRC_DIR)/activationfunctions.c \
 	$(SRC_DIR)/layer.c \
 	$(SRC_DIR)/neuron.c \
+	$(SRC_DIR)/loss.c \
 
 LIBRAWCNEURALNETWORK_UTILS_SOURCES := \
 	$(UTILS_DIR)/fileIO.c \
