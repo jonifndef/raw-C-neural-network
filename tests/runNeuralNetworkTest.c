@@ -1,5 +1,6 @@
 #include "testcases/batches_and_layers_test.h"
 #include "testcases/activation_functions_test.h"
+#include "testcases/loss_test.h"
 
 int main(int argc, char **argv)
 {
@@ -14,6 +15,10 @@ int main(int argc, char **argv)
     TCase *tc1_2 = tcase_create("activation_functions_test");
     suite_add_tcase(s1, tc1_2);
     tcase_add_test(tc1_2, activation_functions_test);
+
+    TCase *tc1_3 = tcase_create("loss_test");
+    suite_add_tcase(s1, tc1_3);
+    tcase_add_test(tc1_3, loss_test);
 
     srunner_run_all(sr, CK_ENV);
     numFailed = srunner_ntests_failed(sr);
