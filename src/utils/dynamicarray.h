@@ -34,6 +34,7 @@ bool copyDynamicArr(DynamicArray *destination, const DynamicArray *source);
 void clearDynamicArr(DynamicArray *array);
 
 double getMaxElementDynamicArr(const DynamicArray *array);
+double getAvrageDynamicAarr(const DynamicArray *array);
 void addToAllElementsDynamicArr(DynamicArray *array, double value);
 void subtractFromAllElementsDynamicArr(DynamicArray *array, double value);
 

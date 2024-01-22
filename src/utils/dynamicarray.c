@@ -261,6 +261,20 @@ double getMaxElementDynamicArr(const DynamicArray *array)
     return maxValue;
 }
 
+double getAvrageDynamicAarr(const DynamicArray *array)
+{
+    double avg = 0.0;
+
+    for (int i = 0; i < array->size; i++)
+    {
+        avg += array->data[i];
+    }
+
+    avg /= array->size;
+
+    return avg;
+}
+
 void addToAllElementsDynamicArr(DynamicArray *array, double value)
 {
     for (int i = 0; i < array->size; i++)

@@ -28,5 +28,8 @@ START_TEST(loss_test)
     loss = categorialCrossEntropy(outputs, classTargets);
 
     printDynamicArr(loss);
+
+    double avg = getAvrageDynamicAarr(loss);
+    printf("avg: %f\n", avg);
 }
 #endif // LOSS_TEST_H
