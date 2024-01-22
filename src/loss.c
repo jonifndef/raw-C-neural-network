@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h> // debug
 
-DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const uint *classTargets)
+DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const DynamicArray *classTargets)
 {
     DynamicArray *loss = createDynamicArrWithCapacity(outputs->rows);
     if (!loss)
@@ -12,39 +12,16 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const uint *c
         return NULL;
     }
 
-    int count = 0;
-    int targetIndex = -1;
-    for (int i = 0; i < outputs->rows; i++)
-    {
-        if (classTargets[i] < 0 || classTargets[i] > 1)
-        {
-            return NULL;
-        }
-        
-        if (classTargets[i] == 1)
-        {
-            targetIndex = i;
-            count++;
-        }
-    }
-
-    if (count > 1 || targetIndex == -1)
+    if (classTargets->size != outputs->rows)
     {
         return NULL;
     }
 
     for (int i = 0; i < outputs->rows; i++)
     {
-        //DynamicArray *outputRow = createDynamicArrWithCapacity(outputs->columns);
-        //if (!outputRow)
-        //{
-        //    return NULL;
-        //}
-
         const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
 
-        printf("hejhejehj\n");
-        double lossEntry = -(log(outputRow->data[targetIndex]));
+        double lossEntry = -(log(outputRow->data[(int)classTargets->data[i]]));
         pushBackDynamicArr(loss, lossEntry); 
     }
 

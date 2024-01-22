@@ -8,10 +8,6 @@
 
 START_TEST(loss_test)
 {
-    //double first  = { 0.7, 0.1, 0.2 };
-    //double second = { 0.1, 0.5, 0.4 };
-    //double third  = { 0.02, 0.9, 0.08 };
-
     double olle[3][3] = {{ 0.7,  0.1, 0.2 },
                          { 0.1,  0.5, 0.4 },
                          { 0.02, 0.9, 0.08 }};
@@ -25,9 +21,11 @@ START_TEST(loss_test)
     printf("yoyoyoy\n");
     printDynamicMatrix(outputs);
 
-    uint classTarget[] = { 0, 1, 1 };
+    double classTarget[] = { 0, 1, 1 };
+    DynamicArray *classTargets = createPopulatedDynamicArr(classTarget, 3);
 
-    DynamicArray *loss = categorialCrossEntropy(outputs, classTarget);
+    DynamicArray *loss = createDynamicArr();
+    loss = categorialCrossEntropy(outputs, classTargets);
 
     printDynamicArr(loss);
 }
