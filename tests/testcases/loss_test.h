@@ -2,6 +2,7 @@
 #define LOSS_TEST_H
 
 #include <check.h>
+#include <stdio.h>
 
 #include "../../src/utils/dynamicmatrix.h"
 #include "../../src/loss.h"
@@ -18,11 +19,12 @@ START_TEST(loss_test)
     pushRow(outputs, createPopulatedDynamicArr(olle[1], 3), DO_TAKE_OWNERSHIP);
     pushRow(outputs, createPopulatedDynamicArr(olle[2], 3), DO_TAKE_OWNERSHIP);
 
-    printf("yoyoyoy\n");
     printDynamicMatrix(outputs);
 
     double classTarget[] = { 0, 1, 1 };
-    DynamicArray *classTargets = createPopulatedDynamicArr(classTarget, 3);
+    DynamicArray *classTargetsArr = createPopulatedDynamicArr(classTarget, 3);
+    DynamicMatrix *classTargets = createDynamicMatrix();
+    pushRow(classTargets, classTargetsArr, DO_TAKE_OWNERSHIP);
 
     DynamicArray *loss = createDynamicArr();
     loss = categorialCrossEntropy(outputs, classTargets);
