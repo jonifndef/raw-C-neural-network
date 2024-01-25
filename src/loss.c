@@ -4,6 +4,19 @@
 #include <math.h>
 #include <stdio.h> // debug
 
+static int findHotIndex(const DynamicArray *classTargetsRow)
+{
+    for (int i = 0; i < classTargetsRow->size; i++)
+    {
+        if (classTargetsRow->data[i] == 1)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 static bool verifySparseTargets(const DynamicMatrix *outputs, const DynamicArray *classTargets)
 {
     printDynamicArr(classTargets);
@@ -79,7 +92,7 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const Dynamic
             const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
 
             double lossEntry = -(log(outputRow->data[(int)classTargetsArr->data[i]]));
-            pushBackDynamicArr(loss, lossEntry); 
+            pushBackDynamicArr(loss, lossEntry);
         }
     }
     else
@@ -87,6 +100,18 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const Dynamic
         if (!verifyOneHotTargets(outputs, classTargets))
         {
             return NULL;
+        }
+
+        for (int i = 0; i < outputs->rows; i++)
+        {
+            const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
+            const DynamicArray *classTargetsRow = getDynamicMatrixRowRef(classTargets, i);
+
+            // we need to know which index is set to "1"
+            int hotIndex = findHotIndex(classTargetsRow);
+
+            double lossEntry = -(log(outputRow->data[hotIndex]));
+            pushBackDynamicArr(loss, lossEntry);
         }
     }
 

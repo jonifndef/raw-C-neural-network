@@ -21,8 +21,8 @@ START_TEST(loss_test)
 
     printDynamicMatrix(outputs);
 
-    double classTarget[] = { 0, 1, 1 };
-    DynamicArray *classTargetsArr = createPopulatedDynamicArr(classTarget, 3);
+    double classTargetSparse[] = { 0, 1, 1 };
+    DynamicArray *classTargetsArr = createPopulatedDynamicArr(classTargetSparse, 3);
     DynamicMatrix *classTargets = createDynamicMatrix();
     pushRow(classTargets, classTargetsArr, DO_TAKE_OWNERSHIP);
 
@@ -32,6 +32,28 @@ START_TEST(loss_test)
     printDynamicArr(loss);
 
     double avg = getAvrageDynamicAarr(loss);
-    printf("avg: %f\n", avg);
+    printf("avg sparse: %f\n", avg);
+
+    double classTargetOneHot[3][3] = {{ 1, 0, 0 },
+                                      { 0, 1, 0 },
+                                      { 0, 1, 0 }};
+    freeDynamicMatrix(classTargets);
+
+    DynamicMatrix *classTargetsHot = createDynamicMatrixWithCapacity(3, 3);
+
+    pushRow(classTargetsHot, createPopulatedDynamicArr(classTargetOneHot[0], 3), DO_TAKE_OWNERSHIP);
+    pushRow(classTargetsHot, createPopulatedDynamicArr(classTargetOneHot[1], 3), DO_TAKE_OWNERSHIP);
+    pushRow(classTargetsHot, createPopulatedDynamicArr(classTargetOneHot[2], 3), DO_TAKE_OWNERSHIP);
+
+    clearDynamicArr(loss);
+
+    printDynamicMatrix(classTargetsHot);
+
+    loss = categorialCrossEntropy(outputs, classTargetsHot);
+
+    printDynamicArr(loss);
+
+    avg = getAvrageDynamicAarr(loss);
+    printf("avg one hot: %f\n", avg);
 }
 #endif // LOSS_TEST_H
