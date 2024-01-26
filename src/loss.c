@@ -4,6 +4,13 @@
 #include <math.h>
 #include <stdio.h> // debug
 
+static double clipValue = 1E-7;
+
+static double clipPrediction(double prediction)
+{
+    return (prediction == 1) ? 1 - clipValue : (prediction == 0) ? clipValue : prediction;
+}
+
 static int findHotIndex(const DynamicArray *classTargetsRow)
 {
     for (int i = 0; i < classTargetsRow->size; i++)
@@ -68,6 +75,55 @@ static bool verifyOneHotTargets(const DynamicMatrix *outputs, const DynamicMatri
     return true;
 }
 
+static int getLossSparse(const DynamicMatrix *outputs,
+                         const DynamicMatrix *classTargets,
+                         DynamicArray *loss)
+{
+    const DynamicArray *classTargetsArr = getDynamicMatrixRowRef(classTargets, 0);
+
+    if (!verifySparseTargets(outputs, classTargetsArr))
+    {
+        return -1;
+    }
+
+    for (int i = 0; i < outputs->rows; i++)
+    {
+        const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
+
+        double prediction = clipPrediction(outputRow->data[(int)classTargetsArr->data[i]]);
+        double lossEntry = -(log(prediction));
+        pushBackDynamicArr(loss, lossEntry);
+    }
+
+    return 0;
+}
+
+static int getLossOneHotCoded(const DynamicMatrix *outputs,
+                              const DynamicMatrix *classTargets,
+                              DynamicArray *loss)
+{
+    if (!verifyOneHotTargets(outputs, classTargets))
+    {
+        return -1;
+    }
+
+    for (int i = 0; i < outputs->rows; i++)
+    {
+        const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
+        const DynamicArray *classTargetsRow = getDynamicMatrixRowRef(classTargets, i);
+
+        // we need to know which index is set to "1"
+        int hotIndex = findHotIndex(classTargetsRow);
+
+        double prediction = clipPrediction(outputRow->data[hotIndex]);
+        double lossEntry = -(log(prediction));
+        pushBackDynamicArr(loss, lossEntry);
+    }
+
+    return 0;
+}
+
+
 DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const DynamicMatrix *classTargets)
 {
     DynamicArray *loss = createDynamicArrWithCapacity(outputs->rows);
@@ -80,38 +136,16 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const Dynamic
     // On the other hand, if it's one-hot-coded, i.e. a matrix of indicies
     if (classTargets->rows == 1)
     {
-        const DynamicArray *classTargetsArr = getDynamicMatrixRowRef(classTargets, 0);
-
-        if (!verifySparseTargets(outputs, classTargetsArr))
+        if (getLossSparse(outputs, classTargets, loss))
         {
             return NULL;
-        }
-
-        for (int i = 0; i < outputs->rows; i++)
-        {
-            const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
-
-            double lossEntry = -(log(outputRow->data[(int)classTargetsArr->data[i]]));
-            pushBackDynamicArr(loss, lossEntry);
         }
     }
     else
     {
-        if (!verifyOneHotTargets(outputs, classTargets))
+        if (getLossOneHotCoded(outputs, classTargets, loss))
         {
             return NULL;
-        }
-
-        for (int i = 0; i < outputs->rows; i++)
-        {
-            const DynamicArray *outputRow = getDynamicMatrixRowRef(outputs, i);
-            const DynamicArray *classTargetsRow = getDynamicMatrixRowRef(classTargets, i);
-
-            // we need to know which index is set to "1"
-            int hotIndex = findHotIndex(classTargetsRow);
-
-            double lossEntry = -(log(outputRow->data[hotIndex]));
-            pushBackDynamicArr(loss, lossEntry);
         }
     }
 
