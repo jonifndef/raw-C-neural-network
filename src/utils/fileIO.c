@@ -116,5 +116,7 @@ bool readSampleData(const char *filePath,
     free(line);
     fclose(fp);
 
+    firstRow = true;
+
     return success;
 }
