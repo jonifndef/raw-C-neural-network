@@ -65,6 +65,7 @@ static DynamicArray* allocateDynamicArr(uint capacity)
     DynamicArray *array = calloc(1, sizeof(DynamicArray));
     if (!array)
     {
+        printf("Woooooooooah\n");
         return NULL;
     }
 
@@ -294,6 +295,11 @@ void subtractFromAllElementsDynamicArr(DynamicArray *array, double value)
 // For debug purposes:
 void printDynamicArr(const DynamicArray *array)
 {
+    if (!array)
+    {
+        printf("ouch!\n");
+    }
+
     for (int i = 0; i < array->size; i++)
     {
         printf("%.3f ", array->data[i]);

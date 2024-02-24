@@ -160,9 +160,6 @@ bool forwardDense(LayerDense* layer,
         return false;
     }
 
-    printf("output before activationFunction\n");
-    printDynamicMatrix(outputs);
-
     if (!layer->activationFunction(outputs))
     {
         return false;

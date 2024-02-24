@@ -337,7 +337,7 @@ bool pushRow(DynamicMatrix *matrix,
     if (matrix->rows >= matrix->rowCapacity)
     {
         if (!reAllocDynamicMatrixRows(
-            matrix, matrix->rowCapacity + (matrix->rowCapacity / 2)))
+            matrix, matrix->rowCapacity + (matrix->rowCapacity / 2) + 2))
         {
             return false;
         }
