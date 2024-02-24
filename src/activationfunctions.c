@@ -65,8 +65,6 @@ bool softmax(DynamicMatrix *input)
             {
                 return false;
             }
-
-            batchSum += element;
         }
 
         batchSum = 0;
