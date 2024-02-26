@@ -26,7 +26,6 @@ static int findHotIndex(const DynamicArray *classTargetsRow)
 
 static bool verifySparseTargets(const DynamicMatrix *outputs, const DynamicArray *classTargets)
 {
-    printDynamicArr(classTargets);
     if (classTargets->size != outputs->rows)
     {
         return false;
@@ -129,7 +128,6 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const Dynamic
     DynamicArray *loss = createDynamicArrWithCapacity(outputs->rows);
     if (!loss)
     {
-        printf("najp 1\n");
         return NULL;
     }
 
@@ -139,7 +137,6 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const Dynamic
     {
         if (getLossSparse(outputs, classTargets, loss))
         {
-        printf("najp 2\n");
             return NULL;
         }
     }
@@ -151,7 +148,6 @@ DynamicArray* categorialCrossEntropy(const DynamicMatrix *outputs, const Dynamic
     {
         if (getLossOneHotCoded(outputs, classTargets, loss))
         {
-        printf("najp 3\n"); // we hit this! The y input is not the format that I expected, need to re-think the classTargets thingy I think...
             return NULL;
         }
     }

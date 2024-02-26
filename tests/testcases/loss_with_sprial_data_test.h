@@ -16,43 +16,81 @@ START_TEST(loss_with_spiral_data_test)
     DynamicMatrix *X = createDynamicMatrix();
     DynamicMatrix *y = createDynamicMatrix();
 
-    if (!readSampleData("/home/jonas/Development/raw-C-neural-network/nnfs_python/output_X.txt", " ", X))
-    {
-        printf("hej1ff\n");
-    }
+    ck_assert_ptr_nonnull(X);
+    ck_assert_ptr_nonnull(y);
 
-    if (!readSampleData("/home/jonas/Development/raw-C-neural-network/nnfs_python/output_y.txt", " ", y))
-    {
-        printf("dåff\n");
-    }
+    bool ret = false;
 
-    printf("olle\n");
+    ret = readSampleData("../nnfs_python/output_X.txt", " ", X);
+    ck_assert_int_eq(ret, 1);
+
+    ret = readSampleData("../nnfs_python/output_y.txt", " ", y);
+    ck_assert_int_eq(ret, 1);
+
     LayerDense *layer1 = createLayerDense(3, 1, 2, relu);
     LayerDense *layer2 = createLayerDense(3, 1, 3, softmax);
+
+    ck_assert_ptr_nonnull(layer1);
+    ck_assert_ptr_nonnull(layer2);
 
     DynamicMatrix *output1 = createDynamicMatrix();
     DynamicMatrix *output2 = createDynamicMatrix();
 
-    printf("bolle\n");
-    if (forwardDense(layer1, X))
-        printf("whhops 1");
+    ck_assert_ptr_nonnull(output1);
+    ck_assert_ptr_nonnull(output2);
 
-    if (getOutputCopyFromLayerDense(layer1, output1))
-        printf("whhops 2");
+    ret = forwardDense(layer1, X);
+    ck_assert_int_eq(ret, 1);
 
-    if (forwardDense(layer2, output1))
-        printf("whhops 3");
+    ret = getOutputCopyFromLayerDense(layer1, output1);
+    ck_assert_int_eq(ret, 1);
 
-    if (getOutputCopyFromLayerDense(layer2, output2))
-        printf("whhops 4");
+    ret = forwardDense(layer2, output1);
+    ck_assert_int_eq(ret, 1);
 
-    printf("kalle\n");
+    ret = getOutputCopyFromLayerDense(layer2, output2);
+    ck_assert_int_eq(ret, 1);
+
     DynamicArray *loss = createDynamicArr();
-    loss = categorialCrossEntropy(output2, y);
-    printf("nisse\n");
+    ck_assert_ptr_nonnull(loss);
 
-    printDynamicArr(loss);
-    printf("mean loss: %f\n", getAvrageDynamicAarr(loss));
+    DynamicMatrix *yTranspose = createDynamicMatrixTranspose(y);
+    ck_assert_ptr_nonnull(yTranspose);
+    ck_assert_int_eq(yTranspose->rows, 1);
+    ck_assert_int_eq(yTranspose->columns, 300);
+
+    loss = categorialCrossEntropy(output2, yTranspose);
+    ck_assert_int_eq(loss->size, 300);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 0, 0), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 0, 0), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 0, 1), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 0, 1), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 0, 2), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 0, 2), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 1, 0), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 1, 0), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 1, 1), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 1, 1), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 1, 2), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 1, 2), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 2, 0), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 2, 0), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 2, 1), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 2, 1), 0.35);
+
+    ck_assert_float_gt(getDynamicMatrixElement(output2, 2, 2), 0.32);
+    ck_assert_float_lt(getDynamicMatrixElement(output2, 2, 2), 0.35);
+
+    ck_assert_float_gt(getAvrageDynamicAarr(loss), 1.07);
+    ck_assert_float_lt(getAvrageDynamicAarr(loss), 1.17);
 }
 END_TEST
 
